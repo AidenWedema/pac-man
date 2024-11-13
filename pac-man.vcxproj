@@ -104,10 +104,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>C:\Users\aiden\Documents\ROC\Beroepsgericht\C++\pac-man\SFML-2.6.1\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>C:\Users\aiden\Documents\ROC\Beroepsgericht\C++\pac-man\SFML-2.6.1\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>sfml-window-d.lib;sfml-system-d.lib;sfml-graphics-d.lib;sfml-network-d.lib;sfml-audio-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -127,7 +130,24 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Blinky.cpp" />
+    <ClCompile Include="Clyde.cpp" />
+    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Ghost.cpp" />
+    <ClCompile Include="Inky.cpp" />
+    <ClCompile Include="Object.cpp" />
     <ClCompile Include="pac-man.cpp" />
+    <ClCompile Include="Pinky.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Blinky.h" />
+    <ClInclude Include="Clyde.h" />
+    <ClInclude Include="Game.h" />
+    <ClInclude Include="Ghost.h" />
+    <ClInclude Include="Inky.h" />
+    <ClInclude Include="Object.h" />
+    <ClInclude Include="Pinky.h" />
+    <ClInclude Include="Vector2.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

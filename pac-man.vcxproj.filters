@@ -13,10 +13,60 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Ghosts">
+      <UniqueIdentifier>{8a3bb895-db4f-439c-85e6-aa22137bd1b0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pac-man.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Ghost.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Object.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Blinky.cpp">
+      <Filter>Ghosts</Filter>
+    </ClCompile>
+    <ClCompile Include="Clyde.cpp">
+      <Filter>Ghosts</Filter>
+    </ClCompile>
+    <ClCompile Include="Inky.cpp">
+      <Filter>Ghosts</Filter>
+    </ClCompile>
+    <ClCompile Include="Pinky.cpp">
+      <Filter>Ghosts</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Ghost.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Object.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector2.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Blinky.h">
+      <Filter>Ghosts</Filter>
+    </ClInclude>
+    <ClInclude Include="Clyde.h">
+      <Filter>Ghosts</Filter>
+    </ClInclude>
+    <ClInclude Include="Inky.h">
+      <Filter>Ghosts</Filter>
+    </ClInclude>
+    <ClInclude Include="Pinky.h">
+      <Filter>Ghosts</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
