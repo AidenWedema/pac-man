@@ -11,5 +11,6 @@ Pinky::~Pinky()
 
 void Pinky::CalculateTarget()
 {
-	target = Game::GetInstance()->debugGhostTarget + Game::GetInstance()->debugGhostDirection * 4; // placeholder, change to pacman position and direction later
+	Vector2 dir = Game::GetInstance()->debugGhostDirection;
+	target = Game::GetInstance()->debugGhostTarget + dir * 4; // placeholder, change to pacman position and direction later
 }

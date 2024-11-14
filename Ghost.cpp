@@ -1,9 +1,14 @@
 #include "Ghost.h"
+#include "Game.h"
 
 void Ghost::Update()
 {
 #ifdef _DEBUG // Draw path to target
-
+	sf::CircleShape circle;
+	circle.setPosition(target.x, target.y);
+	circle.setRadius(5);
+	circle.setFillColor(sf::Color::White);
+	Game::GetInstance()->window.draw(circle);
 #endif // _DEBUG
 
 	switch (state)
@@ -66,4 +71,5 @@ std::vector<Directions> Ghost::GetMoveableDirections()
 	if the tile is a wall, the direction is not moveable
 	return the moveable direction(s)
 	*/
+	return {Directions::UP};
 }

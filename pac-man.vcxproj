@@ -135,6 +135,7 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Ghost.cpp" />
     <ClCompile Include="Inky.cpp" />
+    <ClCompile Include="Maze.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="pac-man.cpp" />
     <ClCompile Include="Pinky.cpp" />
@@ -145,6 +146,7 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="Ghost.h" />
     <ClInclude Include="Inky.h" />
+    <ClInclude Include="Maze.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="Pinky.h" />
     <ClInclude Include="Vector2.hpp" />

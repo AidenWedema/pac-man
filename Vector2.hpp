@@ -20,6 +20,7 @@ class Vector2
 public:
 	Vector2() : x(0), y(0) {}
 	Vector2(int8_t x, int8_t y) : x(x), y(y) {}
+	Vector2(Directions direction) { Vector2 dir = Vector2::DirectionToVector(direction); x = dir.x; y = dir.y; }
 	~Vector2() {}
 
 	int8_t x;
@@ -52,6 +53,10 @@ public:
 		if (y < 0)
 			result.x -= std::abs(other) - 1;
 		return result;
+	}
+
+	bool operator==(const Vector2& other) const {
+		return x == other.x && y == other.y;
 	}
 
 	Vector2 operator=(Directions direction)	{
@@ -131,3 +136,15 @@ public:
 		return std::to_string(x) + ", " + std::to_string(y);
 	}
 };
+
+// Define a custom hash function for Vector2 by specializing std::hash
+namespace std {
+	template <>
+	struct hash<Vector2> {
+		std::size_t operator()(const Vector2& v) const {
+			// Combine x and y into a single hash value
+			// A common way is to use bitwise operations or a hashing technique
+			return std::hash<int>()(v.x) ^ (std::hash<int>()(v.y) << 1);
+		}
+	};
+}
