@@ -35,6 +35,16 @@ void Game::Run()
     fpsText.setFillColor(sf::Color::White); // Text color
     fpsText.setPosition(10, 10);            // Position on screen (top-left corner)
 #endif
+    // TEST
+    debugGhostTarget = Vector2(8, 20);
+    debugGhostDirection = Directions::RIGHT;
+    Ghost* ghost = new Ghost();
+    Blinky* blinky = new Blinky();
+    Pinky* pinky = new Pinky();
+	Inky* inky = new Inky(blinky);
+    Clyde* clyde = new Clyde();
+
+
     float minDelta = 1.0f / 60;
     float deltaTime = 0;
     while (window.isOpen())
@@ -50,6 +60,12 @@ void Game::Run()
         }
         auto start = std::chrono::high_resolution_clock::now();
         window.clear();
+
+        ghost->Update();
+        blinky->Update();
+		pinky->Update();
+		inky->Update();
+		clyde->Update();
 
         Maze::GetInstance()->Draw(&window);
 

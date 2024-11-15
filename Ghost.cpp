@@ -3,10 +3,12 @@
 
 void Ghost::Update()
 {
+	target = Game::GetInstance()->debugGhostTarget;
+	std::cout << target.toString() << std::endl;
 #ifdef _DEBUG // Draw path to target
 	sf::CircleShape circle;
-	circle.setPosition(target.x, target.y);
-	circle.setRadius(5);
+	circle.setPosition(target.x * Maze::GetInstance()->GetResolution(), target.y * Maze::GetInstance()->GetResolution());
+	circle.setRadius(4);
 	circle.setFillColor(sf::Color::White);
 	Game::GetInstance()->window.draw(circle);
 #endif // _DEBUG

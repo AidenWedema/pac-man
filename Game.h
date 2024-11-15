@@ -5,6 +5,10 @@
 #include <chrono>
 #include "Vector2.hpp"
 #include "Maze.h"
+#include "Blinky.h"
+#include "Pinky.h"
+#include "Inky.h"
+#include "Clyde.h"
 
 class Game
 {
@@ -14,7 +18,7 @@ public:
 
 	sf::RenderWindow window;
 
-	Vector2 debugGhostTarget = Vector2(28, 24);
+	Vector2 debugGhostTarget = Vector2(8, 20);
 	Directions debugGhostDirection = Directions::RIGHT;
 
 	void Start();

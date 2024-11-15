@@ -3,6 +3,7 @@
 
 Maze::Maze()
 {
+	resolution = 8;
 }
 
 Maze* Maze::instance = nullptr;
@@ -16,16 +17,6 @@ Maze* Maze::GetInstance()
 int Maze::GetTileAtPosition(Vector2 position)
 {
     return maze[position];
-}
-
-Vector2 Maze::ScreenToMazePosition(Vector2 position)
-{
-    return position * 0.125f;
-}
-
-Vector2 Maze::MazeToScreenPosition(Vector2 position)
-{
-    return position * 8;
 }
 
 void Maze::LoadMaze(int level)
@@ -78,9 +69,8 @@ void Maze::MazeFromString(std::string level)
 			return;
 		}
 
-		Vector2 pos = MazeToScreenPosition(Vector2(x, y));
 		sprite->setTexture(*texture);
-		sprite->setPosition(pos.x, pos.y);
+		sprite->setPosition(x * resolution, y * resolution);
 		sprite->setScale(1, 1);
 		std::tuple<sf::Sprite*, sf::Texture*>* tile = new std::tuple<sf::Sprite*, sf::Texture*>(sprite, texture);
 		tiles.push_back(tile);
@@ -97,28 +87,28 @@ void Maze::LoadMaze1()
 		"I            !i            H"
 		"I f--z f---z !i f---z f--z H"
 		"I !  i !   i !i !   i !  i H"
-		"I (__) (___) !i (___) (__) H"
+		"I (__) (___) () (___) (__) H"
 		"I                          H"
 		"I f--z fz f------z fz f--z H"
 		"I (__) !i (__zf__) !i (__) H"
 		"I      !i    !i    !i      H"
 		"{####z !(--z !i f--)i f####}"
-		"     I if__) () (__zi H     "
+		"     I !f__) () (__zi H     "
 		"     I !i          !i H     "
-		"     I !i $=]@@[=€ !i H     "
-		"=====} () H      I () {====="
+		"     I !i $#]@@[#€ !i H     "
+		"=====) () H      I () (====="
 		"          H      I          "
 		"#####z fz H      I fz f#####"
 		"     I !i %======^ !i H     "
 		"     I !i          !i H     "
 		"     I !i f------z !i H     "
-		"<====} () (__zf__) () {====>"
+		"<====) () (__zf__) () (====>"
 		"I            !i            H"
 		"I f--z f---z !i f---z f--z H"
 		"I (_zi (___) () (___) !f_) H"
 		"I   !i                !i   H"
 		"t-z !i fz f------z fz !i f-y"
-		"x_) () !i (__zf__) () !i (_k"
+		"x_) () !i (__zf__) !i () (_k"
 		"I      !i    !i    !i      H"
 		"I f----)(--z !i f--)(----z H"
 		"I (________) () (________) H"

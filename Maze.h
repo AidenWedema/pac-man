@@ -49,15 +49,18 @@ public:
 	static Maze* GetInstance();
 
 	int GetTileAtPosition(Vector2 position);
-	Vector2 ScreenToMazePosition(Vector2 position);
-	Vector2 MazeToScreenPosition(Vector2 position);
 	void LoadMaze(int level);
 
 	void Draw(sf::RenderWindow* window);
 
+	uint16_t GetResolution() { return resolution; }
+	void SetResolution(uint16_t resolution) { this->resolution = resolution; }
+
 private:
 	Maze();
 	~Maze() {};
+
+	uint16_t resolution = 8;
 
 	std::unordered_map<Vector2, int> maze; // <position, tile>
 	std::vector<std::tuple<sf::Sprite*, sf::Texture*>*> tiles;

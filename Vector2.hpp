@@ -59,6 +59,10 @@ public:
 		return x == other.x && y == other.y;
 	}
 
+	Vector2 operator=(const Vector2& other) const {
+		return Vector2(other.x, other.y);
+	}
+
 	Vector2 operator=(Directions direction)	{
 		switch (direction)
 		{
