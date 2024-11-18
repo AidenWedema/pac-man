@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include "Object.h"
+#include "RNG.h"
 class Ghost : public Object
 {
 public:
@@ -18,7 +19,7 @@ public:
 	void Update() override;
 	void Draw(sf::RenderTarget& target) override;
 
-	void SetState(States state) { this->state = state; }
+	void SetState(States state);
 	States GetState() { return state; }
 
 	void SetTarget(Vector2 target) { this->target = target; }

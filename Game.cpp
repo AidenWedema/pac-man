@@ -1,4 +1,5 @@
 #include "Game.h"
+#include "RNG.h"
 
 Game* Game::instance = nullptr;
 Game* Game::GetInstance()
@@ -102,6 +103,36 @@ void Game::Run()
 			debugGhostDirection = Directions::DOWN;
 		}
 
+        // make ghosts switch states based on keybord input
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1))
+        {
+            blinky->SetState(Ghost::States::CHASE);
+			pinky->SetState(Ghost::States::CHASE);
+			inky->SetState(Ghost::States::CHASE);
+			clyde->SetState(Ghost::States::CHASE);
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2))
+		{
+			blinky->SetState(Ghost::States::SCATTER);
+			pinky->SetState(Ghost::States::SCATTER);
+			inky->SetState(Ghost::States::SCATTER);
+			clyde->SetState(Ghost::States::SCATTER);
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3))
+		{
+			blinky->SetState(Ghost::States::FRIGHTEND);
+			pinky->SetState(Ghost::States::FRIGHTEND);
+			inky->SetState(Ghost::States::FRIGHTEND);
+			clyde->SetState(Ghost::States::FRIGHTEND);
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4))
+		{
+			blinky->SetState(Ghost::States::EATEN);
+			pinky->SetState(Ghost::States::EATEN);
+			inky->SetState(Ghost::States::EATEN);
+			clyde->SetState(Ghost::States::EATEN);
+		}
+
 		blinky->Draw(window);
 		pinky->Draw(window);
 		inky->Draw(window);
@@ -126,7 +157,7 @@ void Game::Run()
         auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - spinstart);
         float spintime = duration.count() / 1000000.0f;
         fpsText.setString("FPS: " + std::to_string(1.0f / deltaTime) + "\nDelta Time: " + std::to_string(deltaTime)
-            + "\nSpin Time: " + std::to_string(spintime) + "\nTime spent spinning: " + std::to_string(spintime / deltaTime * 100.0f) + "%");
+            + "\nSpin Time: " + std::to_string(spintime) + "\nTime spent spinning: " + std::to_string(spintime / deltaTime * 100.0f) + "%" + "\nRNG: " + std::to_string(RNG::seed));
         window.draw(fpsText);
         window.display();
 #endif

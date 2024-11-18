@@ -36,6 +36,26 @@ void Ghost::Draw(sf::RenderTarget& target)
 	target.draw(rect);
 }
 
+void Ghost::SetState(States s)
+{
+	switch (s)
+	{
+	case CHASE:
+		direction = (Directions)((direction + 2) % 4);
+		break;
+	case SCATTER:
+		direction = (Directions)((direction + 2) % 4);
+		break;
+	case FRIGHTEND:
+		direction = (Directions)((direction + 2) % 4);
+		break;
+	default:
+		break;
+	}
+
+	state = s;
+}
+
 void Ghost::Chase()
 {
 	CalculateTarget();
@@ -57,12 +77,50 @@ void Ghost::Eaten()
 {
 	target = Vector2(24, 20); // placeholder
 	Move();
+	if (position == target)
+		SetState(CHASE);
 }
 
 void Ghost::Move()
 {
+	direction = GetShortestDirection();
+
+	// move the ghost
+	Vector2 dir = Vector2::DirectionToVector(direction);
+	position.x += dir.x;
+	position.y += dir.y;
+
+	return;
+	//if (x % Maze::GetInstance()->GetResolution() == 0 && y % Maze::GetInstance()->GetResolution() == 0)
+	//	direction = GetShortestDirection();
+
+	//// move the ghost
+	//Vector2 dir = Vector2::DirectionToVector(direction);
+	//x += dir.x * speed;
+	//y += dir.y * speed;
+
+	//// update the ghost's position
+	//position.x = static_cast<int>(x / Maze::GetInstance()->GetResolution());
+	//position.y = static_cast<int>(y / Maze::GetInstance()->GetResolution());
+}
+
+void Ghost::RandomMove()
+{
 	if (x % Maze::GetInstance()->GetResolution() == 0 && y % Maze::GetInstance()->GetResolution() == 0)
-		direction = GetShortestDirection();
+	{
+		int rng = RNG::GetRandom();
+		while (true)
+		{
+			Directions dir = (Directions)(rng % 4);
+			int front = Maze::GetInstance()->GetTileAtPosition(position + dir);
+			if (front == 0 && dir != (direction + 2) % 4)
+			{
+				direction = dir;
+				break;
+			}
+			rng++;
+		}
+	}
 
 	// move the ghost
 	Vector2 dir = Vector2::DirectionToVector(direction);
@@ -72,10 +130,6 @@ void Ghost::Move()
 	// update the ghost's position
 	position.x = static_cast<int>(x / Maze::GetInstance()->GetResolution());
 	position.y = static_cast<int>(y / Maze::GetInstance()->GetResolution());
-}
-
-void Ghost::RandomMove()
-{
 }
 
 std::vector<Directions> Ghost::GetMoveableDirections()
