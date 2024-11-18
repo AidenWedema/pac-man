@@ -9,10 +9,10 @@
 
 enum Directions
 {
-	LEFT,
-	RIGHT,
-	DOWN,
-	UP
+	LEFT = 1,
+	RIGHT = 3,
+	DOWN = 2,
+	UP = 0
 };
 
 class Vector2
@@ -42,7 +42,9 @@ public:
 	}
 
 	Vector2 operator+(const Directions& other) {
-		return *this + DirectionToVector(other);
+		Vector2 result = Vector2(x, y);
+		Vector2 dir = Vector2::DirectionToVector(other);
+		return result + dir;
 	}
 
 	Vector2 operator*(const uint8_t& other)	{
@@ -59,33 +61,8 @@ public:
 		return x == other.x && y == other.y;
 	}
 
-	Vector2 operator=(const Vector2& other) const {
-		return Vector2(other.x, other.y);
-	}
-
-	Vector2 operator=(Directions direction)	{
-		switch (direction)
-		{
-		case LEFT:
-			return Left();
-		case RIGHT:
-			return Right();
-		case DOWN:
-			return Down();
-		case UP:
-			return Up();
-		}
-	}
-
-	Directions operator=(Vector2 direction)	{
-		if (direction.x < 0)
-			return LEFT;
-		if (direction.x > 0)
-			return RIGHT;
-		if (direction.y < 0)
-			return UP;
-		if (direction.y > 0)
-			return DOWN;
+	bool operator!=(const Vector2& other) const {
+		return x != other.x || y != other.y;
 	}
 
 	static Vector2 DirectionToVector(Directions direction) {

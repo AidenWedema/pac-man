@@ -16,7 +16,13 @@ Maze* Maze::GetInstance()
 
 int Maze::GetTileAtPosition(Vector2 position)
 {
-    return maze[position];
+	// Ensure the position is within bounds
+	if (maze.find(position) != maze.end())
+		return maze[position];
+
+	// Return a wall or impassable tile type if out-of-bounds
+	std::cout << position.toString() << " is out of bounds" << std::endl;
+	return -1;
 }
 
 void Maze::LoadMaze(int level)
@@ -71,7 +77,7 @@ void Maze::MazeFromString(std::string level)
 
 		sprite->setTexture(*texture);
 		sprite->setPosition(x * resolution, y * resolution);
-		sprite->setScale(1, 1);
+		sprite->setScale(resolution / texture->getSize().x, resolution / texture->getSize().y);
 		std::tuple<sf::Sprite*, sf::Texture*>* tile = new std::tuple<sf::Sprite*, sf::Texture*>(sprite, texture);
 		tiles.push_back(tile);
 	}

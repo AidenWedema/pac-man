@@ -4,7 +4,7 @@
 class Ghost : public Object
 {
 public:
-	Ghost() { state = CHASE; };
+	Ghost() { state = CHASE; speed = 1.0f; };
 	~Ghost() {};
 
 	enum States
@@ -27,8 +27,11 @@ public:
 protected:
 	States state;
 	Vector2 target;
-	const Vector2 scatterTarget;
+	Vector2 scatterTarget;
 	float speed;
+	sf::Color color;
+	sf::Sprite sprite;
+	sf::Texture texture;
 
 	virtual void CalculateTarget() {};
 
@@ -39,4 +42,6 @@ protected:
 	void Move();
 	void RandomMove();
 	std::vector<Directions> GetMoveableDirections();
+	Directions GetShortestDirection();
+	void DrawGhostPath();
 };

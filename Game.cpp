@@ -36,13 +36,21 @@ void Game::Run()
     fpsText.setPosition(10, 10);            // Position on screen (top-left corner)
 #endif
     // TEST
-    debugGhostTarget = Vector2(8, 20);
+    debugGhostTarget = Vector2(17, 20);
     debugGhostDirection = Directions::RIGHT;
-    Ghost* ghost = new Ghost();
     Blinky* blinky = new Blinky();
     Pinky* pinky = new Pinky();
 	Inky* inky = new Inky(blinky);
     Clyde* clyde = new Clyde();
+
+    blinky->SetPosition(Vector2(8, 14));
+    blinky->SetPosition(7 * Maze::GetInstance()->GetResolution(), 14 * Maze::GetInstance()->GetResolution());
+	pinky->SetPosition(Vector2(8, 14));
+	pinky->SetPosition(7 * Maze::GetInstance()->GetResolution(), 14 * Maze::GetInstance()->GetResolution());
+	inky->SetPosition(Vector2(8, 14));
+	inky->SetPosition(7 * Maze::GetInstance()->GetResolution(), 14 * Maze::GetInstance()->GetResolution());
+	clyde->SetPosition(Vector2(8, 14));
+	clyde->SetPosition(7 * Maze::GetInstance()->GetResolution(), 14 * Maze::GetInstance()->GetResolution());
 
 
     float minDelta = 1.0f / 60;
@@ -61,11 +69,43 @@ void Game::Run()
         auto start = std::chrono::high_resolution_clock::now();
         window.clear();
 
-        ghost->Update();
         blinky->Update();
 		pinky->Update();
 		inky->Update();
 		clyde->Update();
+
+        sf::CircleShape pacmanShape;
+		pacmanShape.setRadius(Maze::GetInstance()->GetResolution() / 2);
+		pacmanShape.setFillColor(sf::Color::Yellow);
+		pacmanShape.setPosition(debugGhostTarget.x * Maze::GetInstance()->GetResolution(), debugGhostTarget.y * Maze::GetInstance()->GetResolution());
+		window.draw(pacmanShape);
+
+        // move debugghosttarget with arrow keys and change debugghostdirection accordingly
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+		{
+			debugGhostTarget.x -= 1;
+			debugGhostDirection = Directions::LEFT;
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+		{
+			debugGhostTarget.x += 1;
+			debugGhostDirection = Directions::RIGHT;
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+		{
+			debugGhostTarget.y -= 1;
+			debugGhostDirection = Directions::UP;
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+		{
+			debugGhostTarget.y += 1;
+			debugGhostDirection = Directions::DOWN;
+		}
+
+		blinky->Draw(window);
+		pinky->Draw(window);
+		inky->Draw(window);
+		clyde->Draw(window);
 
         Maze::GetInstance()->Draw(&window);
 
@@ -82,12 +122,12 @@ void Game::Run()
         } while (deltaTime < minDelta);
 
 #ifdef _DEBUG
-        /*auto end = std::chrono::high_resolution_clock::now();
+        auto end = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - spinstart);
         float spintime = duration.count() / 1000000.0f;
         fpsText.setString("FPS: " + std::to_string(1.0f / deltaTime) + "\nDelta Time: " + std::to_string(deltaTime)
             + "\nSpin Time: " + std::to_string(spintime) + "\nTime spent spinning: " + std::to_string(spintime / deltaTime * 100.0f) + "%");
-        window.draw(fpsText);*/
+        window.draw(fpsText);
         window.display();
 #endif
     }
