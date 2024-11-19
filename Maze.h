@@ -66,6 +66,7 @@ public:
 	void LoadMaze(int level);
 
 	std::vector<Node*> GetMaze() { return maze; }
+	Node* GetNode(Vector2 position) { for (Node* n : maze) if (n->position == position) return n; return nullptr; }
 
 	void Draw(sf::RenderWindow* window);
 
