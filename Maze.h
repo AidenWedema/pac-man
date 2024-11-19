@@ -48,13 +48,6 @@ public:
 	static Maze* instance;
 	static Maze* GetInstance();
 
-	void LoadMaze(int level);
-
-	void Draw(sf::RenderWindow* window);
-
-	uint16_t GetResolution() { return resolution; }
-	void SetResolution(uint16_t resolution) { this->resolution = resolution; }
-
 	struct Node
 	{
 		Node(Vector2 position) : position(position) {}
@@ -69,6 +62,15 @@ public:
 			connections[direction] = node;
 		}
 	};
+
+	void LoadMaze(int level);
+
+	std::vector<Node*> GetMaze() { return maze; }
+
+	void Draw(sf::RenderWindow* window);
+
+	uint16_t GetResolution() { return resolution; }
+	void SetResolution(uint16_t resolution) { this->resolution = resolution; }
 
 private:
 	Maze();
