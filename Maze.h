@@ -48,7 +48,6 @@ public:
 	static Maze* instance;
 	static Maze* GetInstance();
 
-	int GetTileAtPosition(Vector2 position);
 	void LoadMaze(int level);
 
 	void Draw(sf::RenderWindow* window);
@@ -56,16 +55,33 @@ public:
 	uint16_t GetResolution() { return resolution; }
 	void SetResolution(uint16_t resolution) { this->resolution = resolution; }
 
+	struct Node
+	{
+		Node(Vector2 position) : position(position) {}
+
+		Vector2 position;
+		std::unordered_map<Directions, Node*> connections;
+		bool warp = false;
+		bool pellets = true;
+
+		void AddConnection(Directions direction, Node* node) 
+		{ 
+			connections[direction] = node;
+		}
+	};
+
 private:
 	Maze();
 	~Maze() {};
 
-	uint16_t resolution = 8;
+	uint16_t resolution = 8;		// resolution of the tiles in pixels
+	Vector2 size = Vector2(28, 36);	// Size of the maze. max 127 x 127, original maze is 28 x 36
 
-	std::unordered_map<Vector2, int> maze; // <position, tile>
+	std::vector<Node*> maze;
 	std::vector<std::tuple<sf::Sprite*, sf::Texture*>*> tiles;
 
-	void MazeFromString(std::string level);
+	void ConnectNodes();
+	void MazeFromString(std::string);
 	void LoadMaze1();
 };
 

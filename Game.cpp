@@ -153,12 +153,12 @@ void Game::Run()
         } while (deltaTime < minDelta);
 
 #ifdef _DEBUG
-        auto end = std::chrono::high_resolution_clock::now();
+        /*auto end = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - spinstart);
         float spintime = duration.count() / 1000000.0f;
         fpsText.setString("FPS: " + std::to_string(1.0f / deltaTime) + "\nDelta Time: " + std::to_string(deltaTime)
             + "\nSpin Time: " + std::to_string(spintime) + "\nTime spent spinning: " + std::to_string(spintime / deltaTime * 100.0f) + "%" + "\nRNG: " + std::to_string(RNG::seed));
-        window.draw(fpsText);
+        window.draw(fpsText);*/
         window.display();
 #endif
     }
