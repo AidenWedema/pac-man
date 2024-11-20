@@ -44,13 +44,13 @@ void Game::Run()
 	Inky* inky = new Inky(blinky);
     Clyde* clyde = new Clyde();
 
-    blinky->SetPosition(Vector2(8, 14));
+    blinky->SetPosition(Vector2(13, 14));
     blinky->SetPosition(7 * Maze::GetInstance()->GetResolution(), 14 * Maze::GetInstance()->GetResolution());
-	pinky->SetPosition(Vector2(8, 14));
+	pinky->SetPosition(Vector2(13, 14));
 	pinky->SetPosition(7 * Maze::GetInstance()->GetResolution(), 14 * Maze::GetInstance()->GetResolution());
-	inky->SetPosition(Vector2(8, 14));
+	inky->SetPosition(Vector2(13, 14));
 	inky->SetPosition(7 * Maze::GetInstance()->GetResolution(), 14 * Maze::GetInstance()->GetResolution());
-	clyde->SetPosition(Vector2(8, 14));
+	clyde->SetPosition(Vector2(13, 14));
 	clyde->SetPosition(7 * Maze::GetInstance()->GetResolution(), 14 * Maze::GetInstance()->GetResolution());
 
 
