@@ -84,6 +84,7 @@ private:
 	std::vector<std::tuple<sf::Sprite*, sf::Texture*>*> tiles;
 
 	void ConnectNodes();
+	void CreateWarp(Node*, Node*, Directions);
 	void MazeFromString(std::string);
 	void LoadMaze1();
 };

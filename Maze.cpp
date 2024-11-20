@@ -54,6 +54,8 @@ void Maze::Draw(sf::RenderWindow* window)
         rect.setFillColor(color);
 		window->draw(rect);
 
+        if (node->warp) continue;
+
         // draw the path to the connections
         for (auto& connection : node->connections)
         {
@@ -70,7 +72,7 @@ void Maze::Draw(sf::RenderWindow* window)
 			window->draw(line, 2, sf::Lines);
         }
     }
-#endif // _DEBUG // draw the connection from each node
+#endif // _DEBUG
 }
 
 void Maze::ConnectNodes()
@@ -100,22 +102,49 @@ void Maze::ConnectNodes()
             // Connect to the node to the right (if it exists)
             if (x + 1 < cols && grid[y][x + 1] != nullptr)
                 currentNode->AddConnection(Directions::RIGHT, grid[y][x + 1]);
+            else if (x + 1 == cols) // Wrap around to the left edge
+                CreateWarp(currentNode, grid[y][0], Directions::RIGHT);
 
             // Connect to the node below (if it exists)
             if (y + 1 < rows && grid[y + 1][x] != nullptr)
                 currentNode->AddConnection(Directions::DOWN, grid[y + 1][x]);
+            else if (y + 1 == rows) // Wrap around to the top edge
+                CreateWarp(currentNode, grid[0][x], Directions::DOWN);
 
             // Connect to the node to the left (if it exists)
-			if (x - 1 >= 0 && grid[y][x - 1] != nullptr)
-				currentNode->AddConnection(Directions::LEFT, grid[y][x - 1]);
+            if (x - 1 >= 0 && grid[y][x - 1] != nullptr)
+                currentNode->AddConnection(Directions::LEFT, grid[y][x - 1]);
+            else if (x - 1 < 0) // Wrap around to the right edge
+                CreateWarp(currentNode, grid[y][cols - 1], Directions::LEFT);
 
-			// Connect to the node above (if it exists)
+            // Connect to the node above (if it exists)
             if (y - 1 >= 0 && grid[y - 1][x] != nullptr)
-				currentNode->AddConnection(Directions::UP, grid[y - 1][x]);
+                currentNode->AddConnection(Directions::UP, grid[y - 1][x]);
+            else if (y - 1 < 0) // Wrap around to the bottom edge
+                CreateWarp(currentNode, grid[rows - 1][x], Directions::UP);
         }
     }
 }
 
+void Maze::CreateWarp(Node* from, Node* to, Directions direction)
+{
+    Directions opposite = (Directions)((direction + 2) % 4);
+    Node* warp1 = new Node(from->position + direction);
+    Node* warp2 = new Node(to->position + opposite);
+
+    maze.push_back(warp1);
+	maze.push_back(warp2);
+
+    warp1->warp = true;
+    warp2->warp = true;
+
+	from->AddConnection(direction, warp1);
+	to->AddConnection(opposite, warp2);
+	warp1->AddConnection(opposite, from);
+	warp2->AddConnection(direction, to);
+    warp1->AddConnection(direction, warp2);
+	warp2->AddConnection(opposite, warp1);
+}
 
 void Maze::MazeFromString(std::string level)
 {
