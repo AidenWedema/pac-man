@@ -11,7 +11,7 @@ Ghost::Ghost()
 void Ghost::Update()
 {
 #ifdef _DEBUG // Draw path to target
-	DrawGhostPath();
+	//DrawGhostPath();
 #endif // _DEBUG
 
 	switch (state)
@@ -100,6 +100,13 @@ void Ghost::Move()
 		direction = GetShortestDirection();
 		Maze::Node* node = Maze::GetInstance()->GetNode(position);
 		moveTarget = node->connections[direction]->position;
+		if (node->warp)
+		{
+			position = node->connections[direction]->position;
+			moveTarget = node->connections[direction]->connections[direction]->position;
+			x = position.x * Maze::GetInstance()->GetResolution();
+			y = position.y * Maze::GetInstance()->GetResolution();
+		}
 	}
 }
 
@@ -117,6 +124,13 @@ void Ghost::RandomMove()
 		direction = directions[rng];
 		Maze::Node* node = Maze::GetInstance()->GetNode(position);
 		moveTarget = node->connections[direction]->position;
+		if (node->warp)
+		{
+			position = node->connections[direction]->position;
+			moveTarget = node->connections[direction]->connections[direction]->position;
+			x = position.x * Maze::GetInstance()->GetResolution();
+			y = position.y * Maze::GetInstance()->GetResolution();
+		}
 	}
 }
 
