@@ -11,7 +11,7 @@ Ghost::Ghost()
 void Ghost::Update()
 {
 #ifdef _DEBUG // Draw path to target
-	//DrawGhostPath();
+	DrawGhostPath();
 #endif // _DEBUG
 
 	switch (state)
@@ -82,10 +82,10 @@ void Ghost::Frightend()
 
 void Ghost::Eaten()
 {
-	target = Vector2(24, 20); // placeholder
-	Move();
+	target = Vector2(14, 14); // placeholder
+	Move();/*
 	if (position == target)
-		SetState(CHASE);
+		SetState(CHASE);*/
 }
 
 void Ghost::Move()
@@ -210,6 +210,10 @@ void Ghost::DrawGhostPath()
 			Eaten();
 			break;
 		}
+
+		// check if position is already in the path
+		if (std::find(path.begin(), path.end(), position) != path.end())
+			continue;
 
 		path.push_back(position);
 

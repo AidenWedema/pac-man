@@ -14,6 +14,8 @@ Clyde::Clyde()
 	sprite.setPosition(x, y);
 
 	color = sf::Color::Color(255, 183, 81, 255);
+
+	scatterTarget = Vector2(0, 33); // placeholder
 }
 
 Clyde::~Clyde()
@@ -26,7 +28,7 @@ void Clyde::CalculateTarget()
 		target = scatterTarget;
 	else
 		target = Game::GetInstance()->debugGhostTarget; // placeholder, change to pacman position later
-#ifdef _DEBUG
+#ifdef FALSE
 	sf::Color c = color;
 	c.a = 128;
 	sf::CircleShape radius;

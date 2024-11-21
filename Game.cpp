@@ -82,24 +82,29 @@ void Game::Run()
 		window.draw(pacmanShape);
 
         // move debugghosttarget with arrow keys and change debugghostdirection accordingly
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+        Maze::Node* node = Maze::GetInstance()->GetNode(debugGhostTarget);
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 		{
-			debugGhostTarget.x -= 1;
-			debugGhostDirection = Directions::LEFT;
-		}
+            if (node->connections.find(debugGhostDirection) != node->connections.end())
+                debugGhostTarget = node->connections[debugGhostDirection]->position;
+            debugGhostDirection = Directions::LEFT;
+        }
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 		{
-			debugGhostTarget.x += 1;
+            if (node->connections.find(debugGhostDirection) != node->connections.end())
+				debugGhostTarget = node->connections[debugGhostDirection]->position;
 			debugGhostDirection = Directions::RIGHT;
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 		{
-			debugGhostTarget.y -= 1;
+            if (node->connections.find(debugGhostDirection) != node->connections.end())
+				debugGhostTarget = node->connections[debugGhostDirection]->position;
 			debugGhostDirection = Directions::UP;
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
 		{
-			debugGhostTarget.y += 1;
+            if (node->connections.find(debugGhostDirection) != node->connections.end())
+				debugGhostTarget = node->connections[debugGhostDirection]->position;
 			debugGhostDirection = Directions::DOWN;
 		}
 

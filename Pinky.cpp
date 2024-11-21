@@ -14,6 +14,8 @@ Pinky::Pinky()
 	sprite.setPosition(x, y);
 
 	color = sf::Color::Color(255, 183, 255, 255);
+
+	scatterTarget = Vector2(0, 3); // placeholder
 }
 
 Pinky::~Pinky()

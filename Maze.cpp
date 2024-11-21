@@ -43,7 +43,7 @@ void Maze::Draw(sf::RenderWindow* window)
 	for (std::tuple<sf::Sprite*, sf::Texture*>* tile : tiles)
 		window->draw(*std::get<0>(*tile));
 
-#ifdef _DEBUG // draw the connection from each node
+#ifdef FALSE // draw the connection from each node
     const sf::Color color = sf::Color(255, 255, 255, 128);
     for (Node* node : maze)
     {
