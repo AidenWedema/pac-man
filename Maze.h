@@ -5,6 +5,7 @@
 #include <unordered_map>
 #include <SFML/Graphics.hpp>
 #include "Vector2.hpp"
+#include "Pellet.h"
 
 enum Tiles
 {
@@ -51,16 +52,15 @@ public:
 	struct Node
 	{
 		Node(Vector2 position) : position(position) {}
+		Node(Vector2 position, bool pellet, bool super) : position(position), pellet(pellet), super(super) {}
 
 		Vector2 position;
 		std::unordered_map<Directions, Node*> connections;
 		bool warp = false;
-		bool pellets = true;
+		bool pellet = false;
+		bool super = false;
 
-		void AddConnection(Directions direction, Node* node) 
-		{ 
-			connections[direction] = node;
-		}
+		void AddConnection(Directions direction, Node* node) { connections[direction] = node; }
 	};
 
 	void LoadMaze(int level);
@@ -82,6 +82,8 @@ private:
 
 	std::vector<Node*> maze;
 	std::vector<std::tuple<sf::Sprite*, sf::Texture*>*> tiles;
+	Node* spawn;
+	Node* house;
 
 	void ConnectNodes();
 	void CreateWarp(Node*, Node*, Directions);

@@ -138,6 +138,7 @@
     <ClCompile Include="Maze.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="pac-man.cpp" />
+    <ClCompile Include="Pellet.cpp" />
     <ClCompile Include="Pinky.cpp" />
     <ClCompile Include="RNG.cpp" />
   </ItemGroup>
@@ -149,6 +150,7 @@
     <ClInclude Include="Inky.h" />
     <ClInclude Include="Maze.h" />
     <ClInclude Include="Object.h" />
+    <ClInclude Include="Pellet.h" />
     <ClInclude Include="Pinky.h" />
     <ClInclude Include="RNG.h" />
     <ClInclude Include="Vector2.hpp" />
