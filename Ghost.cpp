@@ -1,6 +1,13 @@
 #include "Ghost.h"
 #include "Game.h"
 
+Ghost::Ghost()
+{
+	state = CHASE;
+	speed = 1.0f;
+	moveTarget = Vector2(14, 14); // placeholder
+}
+
 void Ghost::Update()
 {
 #ifdef _DEBUG // Draw path to target
@@ -75,104 +82,94 @@ void Ghost::Frightend()
 
 void Ghost::Eaten()
 {
-	target = Vector2(24, 20); // placeholder
-	Move();
+	target = Vector2(14, 14); // placeholder
+	Move();/*
 	if (position == target)
-		SetState(CHASE);
+		SetState(CHASE);*/
 }
 
 void Ghost::Move()
 {
-	direction = GetShortestDirection();
-
-	// move the ghost
 	Vector2 dir = Vector2::DirectionToVector(direction);
-	position.x += dir.x;
-	position.y += dir.y;
+	x = x + dir.x * speed;
+	y = y + dir.y * speed;
 
-	return;
-	//if (x % Maze::GetInstance()->GetResolution() == 0 && y % Maze::GetInstance()->GetResolution() == 0)
-	//	direction = GetShortestDirection();
-
-	//// move the ghost
-	//Vector2 dir = Vector2::DirectionToVector(direction);
-	//x += dir.x * speed;
-	//y += dir.y * speed;
-
-	//// update the ghost's position
-	//position.x = static_cast<int>(x / Maze::GetInstance()->GetResolution());
-	//position.y = static_cast<int>(y / Maze::GetInstance()->GetResolution());
+	if (x / Maze::GetInstance()->GetResolution() == moveTarget.x && y / Maze::GetInstance()->GetResolution() == moveTarget.y)
+	{
+		position = moveTarget;
+		direction = GetShortestDirection();
+		Maze::Node* node = Maze::GetInstance()->GetNode(position);
+		moveTarget = node->connections[direction]->position;
+		if (node->warp)
+		{
+			position = node->connections[direction]->position;
+			moveTarget = node->connections[direction]->connections[direction]->position;
+			x = position.x * Maze::GetInstance()->GetResolution();
+			y = position.y * Maze::GetInstance()->GetResolution();
+		}
+	}
 }
 
 void Ghost::RandomMove()
 {
-	if (x % Maze::GetInstance()->GetResolution() == 0 && y % Maze::GetInstance()->GetResolution() == 0)
+	Vector2 dir = Vector2::DirectionToVector(direction);
+	x = x + dir.x * speed;
+	y = y + dir.y * speed;
+
+	if (x / Maze::GetInstance()->GetResolution() == moveTarget.x && y / Maze::GetInstance()->GetResolution() == moveTarget.y)
 	{
-		int rng = RNG::GetRandom();
-		while (true)
+		position = moveTarget;
+		std::vector<Directions> directions = GetMoveableDirections();
+		int rng = RNG::GetRandom() % directions.size();
+		direction = directions[rng];
+		Maze::Node* node = Maze::GetInstance()->GetNode(position);
+		moveTarget = node->connections[direction]->position;
+		if (node->warp)
 		{
-			Directions dir = (Directions)(rng % 4);
-			int front = Maze::GetInstance()->GetTileAtPosition(position + dir);
-			if (front == 0 && dir != (direction + 2) % 4)
-			{
-				direction = dir;
-				break;
-			}
-			rng++;
+			position = node->connections[direction]->position;
+			moveTarget = node->connections[direction]->connections[direction]->position;
+			x = position.x * Maze::GetInstance()->GetResolution();
+			y = position.y * Maze::GetInstance()->GetResolution();
 		}
 	}
-
-	// move the ghost
-	Vector2 dir = Vector2::DirectionToVector(direction);
-	x += dir.x * speed;
-	y += dir.y * speed;
-
-	// update the ghost's position
-	position.x = static_cast<int>(x / Maze::GetInstance()->GetResolution());
-	position.y = static_cast<int>(y / Maze::GetInstance()->GetResolution());
 }
 
 std::vector<Directions> Ghost::GetMoveableDirections()
 {
-	std::vector<Directions> moveableDirections;
+	std::vector<Directions> directions = {UP, DOWN, LEFT, RIGHT};
 
-	// get the directions left and right from the ghost's perspective
-	Directions r = (Directions)(direction - 1 == -1 ? 3 : direction - 1);
-	Directions l = (Directions)((direction + 1) % 4);
-	// get the tile in front, left and right of the ghost
-	int front = Maze::GetInstance()->GetTileAtPosition(position + direction);
-	int left = Maze::GetInstance()->GetTileAtPosition(position + l);
-	int right = Maze::GetInstance()->GetTileAtPosition(position + r);
+	// Remove the direction opposite of the current direction. I.E. prevent the ghost from turning around 180 degrees
+	Directions opposite = (Directions)((direction + 2) % 4);
+	directions.erase(std::find(directions.begin(), directions.end(), opposite));
 
-	// if the tile is 0 it is a blank tile and can be moved on
-	if (front == 0)
-		moveableDirections.push_back(direction);
-	if (left == 0)
-		moveableDirections.push_back(l);
-	if (right == 0)
-		moveableDirections.push_back(r);
+	Maze::Node* node = Maze::GetInstance()->GetNode(position);
+	std::vector<Directions> forbidden;
+	for (Directions d : directions)
+	{
+		if (node->connections.find(d) == node->connections.end())
+			forbidden.push_back(d);
+	}
+	for (Directions d : forbidden)
+		directions.erase(std::find(directions.begin(), directions.end(), d));
 
-	//sort the directions so the order is Up, Left, Down, Right
-	std::sort(moveableDirections.begin(), moveableDirections.end());
-	return moveableDirections;
+	return directions;
 }
 
 Directions Ghost::GetShortestDirection()
 {
-	// get the direction that minimizes distance to the target
+	std::vector<Directions> directions = GetMoveableDirections();
+	float shortestDistance = FLT_MAX;
 	Directions dir = direction;
-	std::vector<Directions> moveableDirections = GetMoveableDirections();
-	float shortestdistance = FLT_MAX;
-	for (int i = 0; i < moveableDirections.size(); i++)
+	for (Directions d : directions)
 	{
-		Vector2 point = position + moveableDirections[i];
-		float distance = point.Distance(target);
-		if (distance < shortestdistance)
+		float distance = Vector2::Distance(position + d, target);
+		if (distance < shortestDistance)
 		{
-			shortestdistance = distance;
-			dir = moveableDirections[i];
+			shortestDistance = distance;
+			dir = d;
 		}
 	}
+	
 	return dir;
 }
 
@@ -192,6 +189,7 @@ void Ghost::DrawGhostPath()
 
 	// Use save the current position and direction variables
 	Vector2 curPos = position;
+	Vector2 curMov = moveTarget;
 	Directions curDir = direction;
 	int curX = x;
 	int curY = y;
@@ -213,6 +211,10 @@ void Ghost::DrawGhostPath()
 			break;
 		}
 
+		// check if position is already in the path
+		if (std::find(path.begin(), path.end(), position) != path.end())
+			continue;
+
 		path.push_back(position);
 
 		if (position == target)
@@ -230,6 +232,7 @@ void Ghost::DrawGhostPath()
 
 	// Restore the current position and direction
 	position = curPos;
+	moveTarget = curMov;
 	direction = curDir;
 	x = curX;
 	y = curY;

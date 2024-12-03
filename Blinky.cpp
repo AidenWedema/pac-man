@@ -14,6 +14,8 @@ Blinky::Blinky()
 	sprite.setPosition(x, y);
 
 	color = sf::Color::Color(255, 0, 0, 255);
+
+	scatterTarget = Vector2(27, 3); // placeholder
 }
 
 Blinky::~Blinky()

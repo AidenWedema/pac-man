@@ -48,6 +48,9 @@
     <ClCompile Include="RNG.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Pellet.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Ghost.h">
@@ -78,6 +81,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="RNG.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Pellet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -5,6 +5,7 @@
 #include <unordered_map>
 #include <SFML/Graphics.hpp>
 #include "Vector2.hpp"
+#include "Pellet.h"
 
 enum Tiles
 {
@@ -48,8 +49,24 @@ public:
 	static Maze* instance;
 	static Maze* GetInstance();
 
-	int GetTileAtPosition(Vector2 position);
+	struct Node
+	{
+		Node(Vector2 position) : position(position) {}
+		Node(Vector2 position, bool pellet, bool super) : position(position), pellet(pellet), super(super) {}
+
+		Vector2 position;
+		std::unordered_map<Directions, Node*> connections;
+		bool warp = false;
+		bool pellet = false;
+		bool super = false;
+
+		void AddConnection(Directions direction, Node* node) { connections[direction] = node; }
+	};
+
 	void LoadMaze(int level);
+
+	std::vector<Node*> GetMaze() { return maze; }
+	Node* GetNode(Vector2 position) { for (Node* n : maze) if (n->position == position) return n; return nullptr; }
 
 	void Draw(sf::RenderWindow* window);
 
@@ -60,12 +77,17 @@ private:
 	Maze();
 	~Maze() {};
 
-	uint16_t resolution = 8;
+	uint16_t resolution = 8;		// resolution of the tiles in pixels
+	Vector2 size = Vector2(28, 36);	// Size of the maze. max 127 x 127, original maze is 28 x 36
 
-	std::unordered_map<Vector2, int> maze; // <position, tile>
+	std::vector<Node*> maze;
 	std::vector<std::tuple<sf::Sprite*, sf::Texture*>*> tiles;
+	Node* spawn;
+	Node* house;
 
-	void MazeFromString(std::string level);
+	void ConnectNodes();
+	void CreateWarp(Node*, Node*, Directions);
+	void MazeFromString(std::string);
 	void LoadMaze1();
 };
 

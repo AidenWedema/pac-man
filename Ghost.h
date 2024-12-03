@@ -2,10 +2,11 @@
 #include <vector>
 #include "Object.h"
 #include "RNG.h"
+#include "Maze.h"
 class Ghost : public Object
 {
 public:
-	Ghost() { state = CHASE; speed = 1.0f; };
+	Ghost();
 	~Ghost() {};
 
 	enum States
@@ -27,8 +28,9 @@ public:
 
 protected:
 	States state;
-	Vector2 target;
-	Vector2 scatterTarget;
+	Vector2 moveTarget;		// position to move towards
+	Vector2 target;			// target to get to
+	Vector2 scatterTarget;	// target to get to in scatter state
 	float speed;
 	sf::Color color;
 	sf::Sprite sprite;
