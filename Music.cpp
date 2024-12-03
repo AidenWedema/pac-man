@@ -12,7 +12,6 @@ void Music::PlayMusic(std::string path)
     if (music.getStatus() == sf::SoundSource::Playing) {
         std::cout << "Music is playing successfully!" << std::endl;
     }
-    std::cin.get();
 }
 
 void Music::StopMusic()

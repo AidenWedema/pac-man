@@ -10,6 +10,7 @@
 #include "Pinky.h"
 #include "Inky.h"
 #include "Clyde.h"
+#include "Music.h"
 
 class Game
 {

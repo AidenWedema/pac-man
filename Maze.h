@@ -5,7 +5,6 @@
 #include <unordered_map>
 #include <SFML/Graphics.hpp>
 #include "Vector2.hpp"
-#include "Pellet.h"
 
 enum Tiles
 {
