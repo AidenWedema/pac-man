@@ -65,7 +65,6 @@ void Game::Run()
                 window.close();
             if (event.type == sf::Event::Resized)
                 window.setView(sf::View(sf::FloatRect(0, 0, event.size.width, event.size.height)));
-
         }
         auto start = std::chrono::high_resolution_clock::now();
         window.clear();
