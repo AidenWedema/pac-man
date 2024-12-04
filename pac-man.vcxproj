@@ -156,6 +156,7 @@
     <ClInclude Include="Object.h" />
     <ClInclude Include="Pinky.h" />
     <ClInclude Include="RNG.h" />
+    <ClInclude Include="Scoreboard.hpp" />
     <ClInclude Include="Vector2.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
