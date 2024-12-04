@@ -15,7 +15,29 @@ void Game::Start()
 
     Maze::GetInstance()->LoadMaze(0);
 
-    Run();
+    while (true)
+    {
+        switch (gameState)
+        {
+        case Game::MENU:
+            Menu();
+            break;
+        case Game::GAME:
+            Run();
+            break;
+        default:
+            gameState = Game::MENU;
+			break;
+        }
+    }
+}
+
+void Game::Menu()
+{
+    std::cout << "Menu" << std::endl;
+
+    //test
+    gameState = Game::GAME;
 }
 
 void Game::Run()
@@ -86,7 +108,7 @@ void Game::Run()
 		{
             if (node->connections.find(debugGhostDirection) != node->connections.end())
                 debugGhostTarget = node->connections[debugGhostDirection]->position;
-            debugGhostDirection = Directions::LEFT;
+            debugGhostDirection = Directions::LEFT; 
         }
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 		{
@@ -166,4 +188,8 @@ void Game::Run()
         window.display();
 #endif
     }
+}
+
+void Game::GameOver()
+{
 }

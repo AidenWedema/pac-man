@@ -18,15 +18,24 @@ public:
 	static Game* instance;
 	static Game* GetInstance();
 
+	enum GameState { MENU, GAME };
+
 	sf::RenderWindow window;
 
 	Vector2 debugGhostTarget = Vector2(8, 20);
 	Directions debugGhostDirection = Directions::RIGHT;
 
 	void Start();
+	void Menu();
 	void Run();
+	void GameOver();
+
+	void SetGameState(GameState state) { gameState = state; }
+	GameState GetGameState() const { return gameState; }
 
 private:
 	Game() {};
 	~Game() {};
+
+	GameState gameState = MENU;
 };
