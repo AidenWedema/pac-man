@@ -11,7 +11,9 @@ Game* Game::GetInstance()
 
 void Game::Start()
 {
-    window.create(sf::VideoMode(224, 288), "Pac-man");
+    int res = 24; // Gebruik tafel van 8. (8, 16, 24, 32, ect.)
+    Maze::GetInstance()->SetResolution(res);
+    window.create(sf::VideoMode(28 * res, 36 * res), "Pac-man");
 
     Maze::GetInstance()->LoadMaze(0);
 
