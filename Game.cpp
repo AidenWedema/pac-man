@@ -37,52 +37,7 @@ void Game::Start()
 
 void Game::Menu()
 {
-    AnimationController* ac = new AnimationController();
-    std::vector<std::string> animNames = { "blinky", "inky", "pinky", "clyde", "scared", "eaten", "pac" };
-    for (const auto& anim : animNames)
-    {
-        ac->loadAnimation("assets/animation test/" + anim, anim, 10);
-    }
-    int animIndex = 0;
-    ac->setAnimation(animNames[animIndex]);
 
-    float minDelta = 1.0f / 60;
-    float deltaTime = 0;
-    while (window.isOpen())
-    {
-        sf::Event event;
-        while (window.pollEvent(event))
-        {
-            if (event.type == sf::Event::Closed)
-                window.close();
-            if (event.type == sf::Event::Resized)
-                window.setView(sf::View(sf::FloatRect(0, 0, event.size.width, event.size.height)));
-        }
-        auto start = std::chrono::high_resolution_clock::now();
-		window.clear();
-        
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
-            ac->setAnimation(animNames[++animIndex % animNames.size()]);
-        }
-
-        ac->Update();
-        sf::Sprite sprite = *ac->getSprite();
-        sprite.setPosition(window.getSize().x / 2, window.getSize().y / 2);
-        sprite.setOrigin(0.5f, 0.5f);
-        sprite.setScale(Maze::GetInstance()->GetResolution() / 8, Maze::GetInstance()->GetResolution() / 8);
-		window.draw(sprite);
-
-		window.display();
-
-        // spin until minimum delta time has passed
-        auto spinstart = std::chrono::high_resolution_clock::now();
-        do
-        {
-            auto end = std::chrono::high_resolution_clock::now();
-            auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
-            deltaTime = duration.count() / 1000000.0f; // convert to seconds
-        } while (deltaTime < minDelta);
-    }
 }
 
 void Game::Run()
