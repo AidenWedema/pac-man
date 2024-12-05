@@ -34,10 +34,69 @@ void Game::Start()
 
 void Game::Menu()
 {
-    std::cout << "Menu" << std::endl;
+    sf::Font font;
+    sf::Text TygoTexTV1;
+    sf::Text TygoTexTV2;
+    sf::Text TygoTexTV3;
+    // Load the Arial font from the assets folder
+    if (!font.loadFromFile("assets/fonts/Emulogic.ttf")) {
+        // Handle error if the font fails to load
+        std::cerr << "Error loading Arial font from assets/fonts/Emulogic.ttf" << std::endl;
+        return;
+    }
 
-    //test
-    gameState = Game::GAME;
+    // Initialize the text object for displaying FPS
+    TygoTexTV1.setFont(font);
+    TygoTexTV1.setCharacterSize(14);           // Font size
+    TygoTexTV1.setFillColor(sf::Color::Yellow); // Text color
+    TygoTexTV1.setString("PAC-MAN");
+    
+    TygoTexTV2.setFont(font);
+    TygoTexTV2.setCharacterSize(14);           
+    TygoTexTV2.setFillColor(sf::Color::Yellow); 
+    TygoTexTV2.setString("Press enter\n to start");
+
+   //TygoTexTV3.setFont(font);
+   // TygoTexTV3.setCharacterSize(14);           
+   // TygoTexTV3.setFillColor(sf::Color::Yellow); 
+   // TygoTexTV3.setString("Press 4 to quit");
+
+    int center = window.getSize().x / 2;
+    sf::FloatRect textBounds = TygoTexTV1.getLocalBounds();
+    TygoTexTV1.setOrigin(textBounds.width / 2,2); 
+    TygoTexTV1.setPosition(center,20);
+
+    textBounds = TygoTexTV2.getLocalBounds();
+    TygoTexTV2.setOrigin(textBounds.width / 2, 2);
+    TygoTexTV2.setPosition(center, 80);
+
+    //textBounds = TygoTexTV3.getLocalBounds();
+    //TygoTexTV3.setOrigin(textBounds.width / 2, 2);
+    //TygoTexTV3.setPosition(center, 250);
+
+    sf::Event event;
+    while (window.isOpen()){
+        while (window.pollEvent(event))
+        {
+            if (event.type == sf::Event::Closed)
+                window.close();
+            if (event.type == sf::Event::Resized)
+                window.setView(sf::View(sf::FloatRect(0, 0, event.size.width, event.size.height)));
+        }
+        window.clear();
+        window.draw(TygoTexTV1);
+        window.draw(TygoTexTV2);
+
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
+        {
+            gameState = GameState::GAME;
+            break;
+        }
+
+        //window.draw(TygoTexTV3);
+        window.display();
+        
+    }
 }
 
 void Game::Run()
@@ -74,7 +133,7 @@ void Game::Run()
 	inky->SetPosition(7 * Maze::GetInstance()->GetResolution(), 14 * Maze::GetInstance()->GetResolution());
 	clyde->SetPosition(Vector2(13, 14));
 	clyde->SetPosition(7 * Maze::GetInstance()->GetResolution(), 14 * Maze::GetInstance()->GetResolution());
-
+    
 
     float minDelta = 1.0f / 60;
     float deltaTime = 0;
