@@ -13,6 +13,7 @@ public:
 
 	struct Animation
 	{
+		std::string name;					// Name of the animation
 		int speed;							// Amount of frames to wait before going to the next frame
 		bool reverse;						// Should the animation be played in reverse after it reaches the end
 		std::vector<sf::Texture*>* frames;	// All frames of the animation
@@ -28,6 +29,7 @@ public:
 			texture->loadFromFile(path + "/" + std::to_string(i) + ".png");
 			frames->push_back(texture);
 		}
+		animation->name = name;
 		animation->frames = frames;
 		animation->speed = speed;
 		animation->reverse = reverse;
@@ -75,6 +77,7 @@ public:
 	sf::Sprite* getSprite() { return sprite; };
 	int getIndex() { return index; };
 	int getLength() { return currentAnimation->frames->size(); };
+	Animation* getCurrent() { return currentAnimation; };
 
 private:
 	int index;												// Current index of frame in the animation
