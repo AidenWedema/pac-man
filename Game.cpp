@@ -37,7 +37,7 @@ void Game::Start()
 
 void Game::Menu()
 {
-
+    gameState = Game::GAME;
 }
 
 void Game::Run()

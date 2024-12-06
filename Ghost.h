@@ -3,6 +3,7 @@
 #include "Object.h"
 #include "RNG.h"
 #include "Maze.h"
+#include "AnimationController.hpp"
 class Ghost : public Object
 {
 public:
@@ -33,8 +34,9 @@ protected:
 	Vector2 scatterTarget;	// target to get to in scatter state
 	float speed;
 	sf::Color color;
-	sf::Sprite sprite;
-	sf::Texture texture;
+	sf::Sprite* sprite;
+	std::string name;
+	AnimationController animationController;
 
 	virtual void CalculateTarget() {};
 
@@ -46,5 +48,6 @@ protected:
 	void RandomMove();
 	std::vector<Directions> GetMoveableDirections();
 	Directions GetShortestDirection();
+	void SetAnimation();
 	void DrawGhostPath();
 };

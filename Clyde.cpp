@@ -3,19 +3,14 @@
 
 Clyde::Clyde()
 {
-	texture = sf::Texture();
-	if (!texture.loadFromFile("assets/sprites/clyde/0.png"))
-	{
-		std::cout << "Failed to load the sprite" << std::endl;
-		return;
-	}
-	sprite.setTexture(texture);
-	sprite.setScale(Maze::GetInstance()->GetResolution() / texture.getSize().x, Maze::GetInstance()->GetResolution() / texture.getSize().y);
-	sprite.setPosition(x, y);
-
 	color = sf::Color::Color(255, 183, 81, 255);
 
 	scatterTarget = Vector2(0, 33); // placeholder
+
+	animationController.loadAnimation("assets/sprites/clyde/UP", "UP", 10);
+	animationController.loadAnimation("assets/sprites/clyde/DOWN", "DOWN", 10);
+	animationController.loadAnimation("assets/sprites/clyde/LEFT", "LEFT", 10);
+	animationController.loadAnimation("assets/sprites/clyde/RIGHT", "RIGHT", 10);
 }
 
 Clyde::~Clyde()
