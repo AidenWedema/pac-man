@@ -74,6 +74,7 @@ void Ghost::SetState(States s)
 		break;
 	}
 
+	moveTarget = position;
 	state = s;
 }
 
