@@ -32,6 +32,7 @@ void Game::Start()
 
 void Game::Menu()
 {
+    Music::GetInstance()->PlayMusic("assets/audio/main-theme-menu.ogg");
     bool starting = false;
     int startTimer = 0;
     int scales[] = {8, 16, 24};
@@ -195,6 +196,7 @@ void Game::Run()
     fpsText.setFillColor(sf::Color::White); // Text color
     fpsText.setPosition(10, 10);            // Position on screen (top-left corner)
 #endif
+    Music::GetInstance()->PlayMusic("assets/audio/main-theme-game.ogg");
     // TEST
     debugGhostTarget = Vector2(17, 20);
     debugGhostDirection = Directions::RIGHT;
