@@ -3,9 +3,16 @@
 class Music
 {
 public:
-	static void PlayMusic(std::string path);
-	static void StopMusic();
-private:
+	static Music* GetInstance();
 
+
+	void PlayMusic(std::string path);
+	void StopMusic();
+private:
+	Music();
+	~Music() {};
+	static Music* instance;
+	sf::Music* music;
+	sf::Sound* sound;
 
 };
