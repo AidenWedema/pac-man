@@ -6,6 +6,12 @@ Ghost::Ghost()
 	state = CHASE;
 	speed = 1.0f;
 	moveTarget = Vector2(14, 14); // placeholder
+
+	animationController.loadAnimation("assets/sprites/ghost_eaten/UP", "eaten_UP", 0);
+	animationController.loadAnimation("assets/sprites/ghost_eaten/DOWN", "eaten_DOWN", 0);
+	animationController.loadAnimation("assets/sprites/ghost_eaten/LEFT", "eaten_LEFT", 0);
+	animationController.loadAnimation("assets/sprites/ghost_eaten/RIGHT", "eaten_RIGHT", 0);
+	animationController.loadAnimation("assets/sprites/ghost_scared", "scared", 10);
 }
 
 void Ghost::Update()
@@ -13,6 +19,8 @@ void Ghost::Update()
 #ifdef _DEBUG // Draw path to target
 	DrawGhostPath();
 #endif // _DEBUG
+
+	SetAnimation();
 
 	switch (state)
 	{
@@ -33,8 +41,12 @@ void Ghost::Update()
 
 void Ghost::Draw(sf::RenderTarget& target)
 {
-	sprite.setPosition(x, y);
-	target.draw(sprite);
+	sprite = animationController.getSprite();
+
+	sprite->setScale(Maze::GetInstance()->GetResolution() / 12, Maze::GetInstance()->GetResolution() / 12);
+	sprite->setOrigin(0.5f, 0.5f);
+	sprite->setPosition(x, y);
+	target.draw(*sprite);
 
 	sf::RectangleShape rect;
 	rect.setPosition(position.x * Maze::GetInstance()->GetResolution(), position.y * Maze::GetInstance()->GetResolution());
@@ -56,10 +68,13 @@ void Ghost::SetState(States s)
 	case FRIGHTEND:
 		direction = (Directions)((direction + 2) % 4);
 		break;
+	case EATEN:
+		break;
 	default:
 		break;
 	}
 
+	moveTarget = position;
 	state = s;
 }
 
@@ -94,7 +109,8 @@ void Ghost::Move()
 	x = x + dir.x * speed;
 	y = y + dir.y * speed;
 
-	if (x / Maze::GetInstance()->GetResolution() == moveTarget.x && y / Maze::GetInstance()->GetResolution() == moveTarget.y)
+	int res = Maze::GetInstance()->GetResolution();
+	if (moveTarget.x * res == x && moveTarget.y * res == y)
 	{
 		position = moveTarget;
 		direction = GetShortestDirection();
@@ -171,6 +187,34 @@ Directions Ghost::GetShortestDirection()
 	}
 	
 	return dir;
+}
+
+void Ghost::SetAnimation()
+{
+	if (animationController.getCurrent() == nullptr)
+		animationController.setAnimation("scared");
+
+	animationController.Update();
+
+	std::string dirStr = Vector2::DirectionToString(direction);
+	switch (state)
+	{
+	case Ghost::CHASE:
+	case Ghost::SCATTER:
+		if (animationController.getCurrent()->name != dirStr)
+			animationController.setAnimation(dirStr);
+		break;
+	case Ghost::FRIGHTEND:
+		if (animationController.getCurrent()->name != "scared")
+			animationController.setAnimation("scared");
+		break;
+	case Ghost::EATEN:
+		if (animationController.getCurrent()->name != "eaten_" + dirStr)
+			animationController.setAnimation("eaten_" + dirStr);
+		break;
+	default:
+		break;
+	}
 }
 
 void Ghost::DrawGhostPath()

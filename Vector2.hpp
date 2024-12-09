@@ -116,6 +116,20 @@ public:
 	{
 		return std::to_string(x) + ", " + std::to_string(y);
 	}
+
+	static std::string DirectionToString(Directions direction) {
+		switch (direction)
+		{
+		case LEFT:
+			return "LEFT";
+		case RIGHT:
+			return "RIGHT";
+		case DOWN:
+			return "DOWN";
+		case UP:
+			return "UP";
+		}
+	}
 };
 
 // Define a custom hash function for Vector2 by specializing std::hash

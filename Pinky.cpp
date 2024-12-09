@@ -3,19 +3,14 @@
 
 Pinky::Pinky()
 {
-	texture = sf::Texture();
-	if (!texture.loadFromFile("assets/sprites/pinky/0.png"))
-	{
-		std::cout << "Failed to load the sprite" << std::endl;
-		return;
-	}
-	sprite.setTexture(texture);
-	sprite.setScale(Maze::GetInstance()->GetResolution() / texture.getSize().x, Maze::GetInstance()->GetResolution() / texture.getSize().y);
-	sprite.setPosition(x, y);
-
 	color = sf::Color::Color(255, 183, 255, 255);
 
 	scatterTarget = Vector2(0, 3); // placeholder
+
+	animationController.loadAnimation("assets/sprites/pinky/UP", "UP", 10);
+	animationController.loadAnimation("assets/sprites/pinky/DOWN", "DOWN", 10);
+	animationController.loadAnimation("assets/sprites/pinky/LEFT", "LEFT", 10);
+	animationController.loadAnimation("assets/sprites/pinky/RIGHT", "RIGHT", 10);
 }
 
 Pinky::~Pinky()
