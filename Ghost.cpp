@@ -27,6 +27,20 @@ void Ghost::Update()
 
 	switch (state)
 	{
+	case HOME:
+		homeTimer--;
+		if (homeTimer > 0)
+			break;
+		target = Maze::GetInstance()->GetHouse()->position;
+		if (position == target + Vector2(0, 2))
+		{
+			direction = UP;
+			moveTarget = target;
+		}
+		if (position == target)
+			state = CHASE;
+		Move();
+		break;
 	case CHASE:
 		Chase();
 		break;

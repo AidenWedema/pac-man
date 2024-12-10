@@ -15,7 +15,8 @@ public:
 		CHASE,
 		SCATTER,
 		FRIGHTEND,
-		EATEN
+		EATEN,
+		HOME
 	};
 
 	void Update() override;
@@ -37,6 +38,7 @@ protected:
 	sf::Sprite* sprite;
 	std::string name;
 	AnimationController animationController;
+	int homeTimer;
 
 	virtual void CalculateTarget() {};
 
