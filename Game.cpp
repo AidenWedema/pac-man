@@ -202,28 +202,22 @@ void Game::Run()
     fpsText.setPosition(10, 10);            // Position on screen (top-left corner)
 #endif
     Music::GetInstance()->PlayMusic("assets/audio/main-theme-game.ogg");
+    Maze::GetInstance()->LoadMaze(0);
     // TEST
     debugGhostTarget = Vector2(17, 20);
     debugGhostDirection = Directions::RIGHT;
-    Blinky* blinky = new Blinky();
-    Pinky* pinky = new Pinky();
-	Inky* inky = new Inky(blinky);
-    Clyde* clyde = new Clyde();
+    Vector2 pacSpawn = Maze::GetInstance()->GetSpawn()->position;
+    Vector2 ghostHouse = Maze::GetInstance()->GetHouse()->position;
+    Player* pacman = new Player();
+    Blinky* blinky = new Blinky(ghostHouse);
+    Pinky* pinky = new Pinky(ghostHouse + Vector2(0, 3));
+	Inky* inky = new Inky(ghostHouse + Vector2(-2, 3), blinky);
+    Clyde* clyde = new Clyde(ghostHouse + Vector2(2, 3));
 
-    blinky->SetPosition(Vector2(13, 14));
-    blinky->SetPosition(7 * Maze::GetInstance()->GetResolution(), 14 * Maze::GetInstance()->GetResolution());
-	pinky->SetPosition(Vector2(13, 14));
-	pinky->SetPosition(7 * Maze::GetInstance()->GetResolution(), 14 * Maze::GetInstance()->GetResolution());
-	inky->SetPosition(Vector2(13, 14));
-	inky->SetPosition(7 * Maze::GetInstance()->GetResolution(), 14 * Maze::GetInstance()->GetResolution());
-	clyde->SetPosition(Vector2(13, 14));
-	clyde->SetPosition(7 * Maze::GetInstance()->GetResolution(), 14 * Maze::GetInstance()->GetResolution());
+    int resolution = Maze::GetInstance()->GetResolution();
+    pacman->SetPosition(pacSpawn);
+	pacman->SetPosition(pacSpawn.x * resolution, pacSpawn.y * resolution);
     
-<<<<<<< Updated upstream
-    Maze::GetInstance()->LoadMaze(0);
-
-=======
->>>>>>> Stashed changes
     float minDelta = 1.0f / 60;
     float deltaTime = 0;
     while (window.isOpen())
@@ -242,80 +236,24 @@ void Game::Run()
         auto start = std::chrono::high_resolution_clock::now();
         window.clear();
 
+        pacman->Update();
+
+        debugGhostTarget = pacman->GetPosition();
+        debugGhostDirection = pacman->GetDirection();
+
         blinky->Update();
 		pinky->Update();
 		inky->Update();
 		clyde->Update();
 
-        sf::CircleShape pacmanShape;
-		pacmanShape.setRadius(Maze::GetInstance()->GetResolution() / 2);
-		pacmanShape.setFillColor(sf::Color::Yellow);
-		pacmanShape.setPosition(debugGhostTarget.x * Maze::GetInstance()->GetResolution(), debugGhostTarget.y * Maze::GetInstance()->GetResolution());
-		window.draw(pacmanShape);
-
-        // move debugghosttarget with arrow keys and change debugghostdirection accordingly
-        Maze::Node* node = Maze::GetInstance()->GetNode(debugGhostTarget);
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-		{
-            if (node->connections.find(debugGhostDirection) != node->connections.end())
-                debugGhostTarget = node->connections[debugGhostDirection]->position;
-            debugGhostDirection = Directions::LEFT; 
-        }
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-		{
-            if (node->connections.find(debugGhostDirection) != node->connections.end())
-				debugGhostTarget = node->connections[debugGhostDirection]->position;
-			debugGhostDirection = Directions::RIGHT;
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-		{
-            if (node->connections.find(debugGhostDirection) != node->connections.end())
-				debugGhostTarget = node->connections[debugGhostDirection]->position;
-			debugGhostDirection = Directions::UP;
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-		{
-            if (node->connections.find(debugGhostDirection) != node->connections.end())
-				debugGhostTarget = node->connections[debugGhostDirection]->position;
-			debugGhostDirection = Directions::DOWN;
-		}
-
-        // make ghosts switch states based on keybord input
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1))
-        {
-            blinky->SetState(Ghost::States::CHASE);
-			pinky->SetState(Ghost::States::CHASE);
-			inky->SetState(Ghost::States::CHASE);
-			clyde->SetState(Ghost::States::CHASE);
-        }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2))
-		{
-			blinky->SetState(Ghost::States::SCATTER);
-			pinky->SetState(Ghost::States::SCATTER);
-			inky->SetState(Ghost::States::SCATTER);
-			clyde->SetState(Ghost::States::SCATTER);
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3))
-		{
-			blinky->SetState(Ghost::States::FRIGHTEND);
-			pinky->SetState(Ghost::States::FRIGHTEND);
-			inky->SetState(Ghost::States::FRIGHTEND);
-			clyde->SetState(Ghost::States::FRIGHTEND);
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4))
-		{
-			blinky->SetState(Ghost::States::EATEN);
-			pinky->SetState(Ghost::States::EATEN);
-			inky->SetState(Ghost::States::EATEN);
-			clyde->SetState(Ghost::States::EATEN);
-		}
+        Maze::GetInstance()->Draw(&window);
 
 		blinky->Draw(window);
 		pinky->Draw(window);
 		inky->Draw(window);
 		clyde->Draw(window);
 
-        Maze::GetInstance()->Draw(&window);
+        pacman->Draw(window);
 
 #ifndef _DEBUG
         window.display();
@@ -330,12 +268,12 @@ void Game::Run()
         } while (deltaTime < minDelta);
 
 #ifdef _DEBUG
-        /*auto end = std::chrono::high_resolution_clock::now();
+        auto end = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - spinstart);
         float spintime = duration.count() / 1000000.0f;
         fpsText.setString("FPS: " + std::to_string(1.0f / deltaTime) + "\nDelta Time: " + std::to_string(deltaTime)
             + "\nSpin Time: " + std::to_string(spintime) + "\nTime spent spinning: " + std::to_string(spintime / deltaTime * 100.0f) + "%" + "\nRNG: " + std::to_string(RNG::seed));
-        window.draw(fpsText);*/
+        window.draw(fpsText);
         window.display();
 #endif
     }
