@@ -43,7 +43,11 @@ void Ghost::Draw(sf::RenderTarget& target)
 {
 	sprite = animationController.getSprite();
 
-	sprite->setScale(Maze::GetInstance()->GetResolution() / 12, Maze::GetInstance()->GetResolution() / 12);
+	int resolution = Maze::GetInstance()->GetResolution();
+	float scale = resolution / 12;
+	if (scale < 1.0f)
+		scale = 1.0f;
+	sprite->setScale(scale, scale);
 	sprite->setOrigin(0.5f, 0.5f);
 	sprite->setPosition(x, y);
 	target.draw(*sprite);
