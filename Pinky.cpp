@@ -14,7 +14,6 @@ Pinky::Pinky(Vector2 pos) : Ghost(pos)
 
 	state = HOME;
 	homeTimer = 120; // 2 seconds
-	direction = UP;
 }
 
 Pinky::~Pinky()

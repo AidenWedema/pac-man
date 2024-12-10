@@ -14,7 +14,7 @@ Clyde::Clyde(Vector2 pos) : Ghost(pos)
 
 	state = HOME;
 	homeTimer = 720; // 12 seconds
-	direction = UP;
+	direction = LEFT;
 }
 
 Clyde::~Clyde()

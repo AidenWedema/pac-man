@@ -16,7 +16,6 @@ Inky::Inky(Vector2 pos, Blinky* blinky) : Ghost(pos)
 
 	state = HOME;
 	homeTimer = 420; // 7 seconds
-	direction = UP;
 }
 
 Inky::~Inky()

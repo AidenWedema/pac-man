@@ -31,6 +31,8 @@ void Ghost::Update()
 		homeTimer--;
 		if (homeTimer > 0)
 			break;
+		if (homeTimer == 0)
+			moveTarget = position + direction;
 		target = Maze::GetInstance()->GetHouse()->position;
 		if (position == target + Vector2(0, 2))
 		{
