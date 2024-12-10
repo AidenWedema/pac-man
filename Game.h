@@ -19,7 +19,7 @@ public:
 	static Game* instance;
 	static Game* GetInstance();
 
-	enum GameState { MENU, GAME };
+	enum GameState { CLOSE, MENU, GAME };
 
 	sf::RenderWindow window;
 
