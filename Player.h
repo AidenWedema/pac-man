@@ -1,5 +1,7 @@
 #pragma once
 #include "Object.h"
+#include "AnimationController.hpp"
+
 class Player : public Object
 {
 public:
@@ -16,5 +18,7 @@ public:
 
 	void Move();
 	void Draw();
+
+	AnimationController animations;
 };
 
