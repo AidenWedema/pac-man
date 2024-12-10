@@ -11,6 +11,10 @@ Pinky::Pinky()
 	animationController.loadAnimation("assets/sprites/pinky/DOWN", "DOWN", 10);
 	animationController.loadAnimation("assets/sprites/pinky/LEFT", "LEFT", 10);
 	animationController.loadAnimation("assets/sprites/pinky/RIGHT", "RIGHT", 10);
+
+	state = HOME;
+	homeTimer = 120; // 2 seconds
+	direction = UP;
 }
 
 Pinky::~Pinky()

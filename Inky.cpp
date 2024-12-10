@@ -13,6 +13,10 @@ Inky::Inky(Blinky* blinky)
 	animationController.loadAnimation("assets/sprites/inky/DOWN", "DOWN", 10);
 	animationController.loadAnimation("assets/sprites/inky/LEFT", "LEFT", 10);
 	animationController.loadAnimation("assets/sprites/inky/RIGHT", "RIGHT", 10);
+
+	state = HOME;
+	homeTimer = 420; // 7 seconds
+	direction = UP;
 }
 
 Inky::~Inky()

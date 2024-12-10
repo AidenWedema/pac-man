@@ -11,6 +11,10 @@ Clyde::Clyde()
 	animationController.loadAnimation("assets/sprites/clyde/DOWN", "DOWN", 10);
 	animationController.loadAnimation("assets/sprites/clyde/LEFT", "LEFT", 10);
 	animationController.loadAnimation("assets/sprites/clyde/RIGHT", "RIGHT", 10);
+
+	state = HOME;
+	homeTimer = 720; // 12 seconds
+	direction = UP;
 }
 
 Clyde::~Clyde()
