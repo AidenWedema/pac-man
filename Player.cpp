@@ -11,6 +11,14 @@ Player::Player()
 	moveTarget = Vector2(14,14);
 	x = position.x * Maze::GetInstance()->GetResolution();
 	y = position.y * Maze::GetInstance()->GetResolution();
+
+	animations.loadAnimation("assets/test animations/Die", "die", 12);
+	animations.loadAnimation("assets/test animations/UP", "UP", 12, true);
+	animations.loadAnimation("assets/test animations/DOWN", "DOWN", 12, true);
+	animations.loadAnimation("assets/test animations/LEFT", "LEFT", 12, true);
+	animations.loadAnimation("assets/test animations/RIGHT", "RIGHT", 12, true);
+
+	animations.setAnimation("RIGHT");
 }
 
 void Player::Update()
@@ -27,6 +35,12 @@ void Player::Update()
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
 		bufferDirection = DOWN;
 	}
+
+	animations.Update();
+
+	std::string dirStr = Vector2::DirectionToString(direction);
+	if (animations.getCurrent()->name != dirStr)
+		animations.setAnimation(dirStr);
 	
 	Move();
 }
@@ -68,9 +82,15 @@ void Player::Move()
 
 void Player::Draw(sf::RenderTarget& target)
 {
-	sf::RectangleShape rect;
+
+	sf::Sprite* sprite = animations.getSprite();
+	sprite->setPosition(x, y);
+	sprite->setOrigin(sprite->getLocalBounds().width / 2, sprite->getLocalBounds().height / 2);
+	target.draw(*sprite);
+
+	/*sf::RectangleShape rect;
 	rect.setPosition(position.x * Maze::GetInstance()->GetResolution(), position.y * Maze::GetInstance()->GetResolution());
 	rect.setSize(sf::Vector2f(Maze::GetInstance()->GetResolution() * 0.8f, Maze::GetInstance()->GetResolution() * 0.8f));
 	rect.setFillColor(sf::Color::Yellow);
-	target.draw(rect);
+	target.draw(rect);*/
 }
