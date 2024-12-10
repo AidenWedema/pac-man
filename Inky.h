@@ -5,7 +5,7 @@
 class Inky : public Ghost
 {
 public:
-	Inky(Blinky* blinky);
+	Inky(Vector2 position, Blinky* blinky);
 	~Inky();
 
 private:

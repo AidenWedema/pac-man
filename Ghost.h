@@ -7,7 +7,7 @@
 class Ghost : public Object
 {
 public:
-	Ghost();
+	Ghost(Vector2 position);
 	~Ghost() {};
 
 	enum States

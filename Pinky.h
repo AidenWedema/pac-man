@@ -3,7 +3,7 @@
 class Pinky : public Ghost
 {
 public:
-	Pinky();
+	Pinky(Vector2 position);
 	~Pinky();
 
 private:

@@ -3,7 +3,7 @@
 class Clyde : public Ghost
 {
 public:
-	Clyde();
+	Clyde(Vector2 position);
 	~Clyde();
 
 private:

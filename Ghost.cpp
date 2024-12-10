@@ -1,11 +1,14 @@
 #include "Ghost.h"
 #include "Game.h"
 
-Ghost::Ghost()
+Ghost::Ghost(Vector2 pos)
 {
 	state = CHASE;
 	speed = 1.0f;
-	moveTarget = Vector2(14, 14); // placeholder
+	position = pos;
+	x = position.x * Maze::GetInstance()->GetResolution();
+	y = position.y * Maze::GetInstance()->GetResolution();
+	moveTarget = position + direction;
 
 	animationController.loadAnimation("assets/sprites/ghost_eaten/UP", "eaten_UP", 0);
 	animationController.loadAnimation("assets/sprites/ghost_eaten/DOWN", "eaten_DOWN", 0);

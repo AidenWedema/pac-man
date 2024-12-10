@@ -43,7 +43,7 @@ void Maze::Draw(sf::RenderWindow* window)
 	for (std::tuple<sf::Sprite*, sf::Texture*>* tile : tiles)
 		window->draw(*std::get<0>(*tile));
 
-#ifdef FALSE // draw the connection from each node
+#ifdef _DEBUG // draw the connection from each node
     const sf::Color color = sf::Color(255, 255, 255, 128);
     for (Node* node : maze)
     {
@@ -151,7 +151,7 @@ void Maze::MazeFromString(std::string level)
     char t[] = { ' ', '=', '#', 'I', 'H', '<', '{', '>', '}', 'q', 'p', 'd', 'b', 'y','t',
         'k', 'x', '!', 'i', '-', '_', 'f', '(', 'z', ')', '$', '%', '€', '^', ']', '[', '@'};
 
-    char s[] = { '.', 'o', 'S', 'G'};
+    char s[] = { '.', 'o', 'G', 'S'};
 
     for (int i = 0; i < level.size(); i++)
     {
@@ -163,7 +163,7 @@ void Maze::MazeFromString(std::string level)
         if (std::find(t, t + 32, c) != std::end(t))
             index = std::find(t, t + 32, c) - t;
         else
-            index = std::find(s, s + 2, c) - s + 100; // if c is not in tiles, get the index of c in symbols
+            index = std::find(s, s + 4, c) - s + 100; // if c is not in tiles, get the index of c in symbols
 
         bool isPellet = false;
         bool isSuper = false;

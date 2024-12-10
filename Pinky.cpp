@@ -1,7 +1,7 @@
 #include "Pinky.h"
 #include "Game.h"
 
-Pinky::Pinky()
+Pinky::Pinky(Vector2 pos) : Ghost(pos)
 {
 	color = sf::Color::Color(255, 183, 255, 255);
 

@@ -7,8 +7,8 @@ Player::Player()
 	speed = 1.0f;
 	direction = RIGHT;
 	
-	position = Vector2(13, 14);
-	moveTarget = Vector2(14,14);
+	position = Vector2(13, 26);
+	moveTarget = Vector2(14,26);
 	x = position.x * Maze::GetInstance()->GetResolution();
 	y = position.y * Maze::GetInstance()->GetResolution();
 
@@ -84,8 +84,13 @@ void Player::Draw(sf::RenderTarget& target)
 {
 
 	sf::Sprite* sprite = animations.getSprite();
+	int resolution = Maze::GetInstance()->GetResolution();
+	float scale = resolution / 8;
+	if (scale < 1.0f)
+		scale = 1.0f;
+	sprite->setScale(scale, scale);
 	sprite->setPosition(x, y);
-	sprite->setOrigin(sprite->getLocalBounds().width / 2, sprite->getLocalBounds().height / 2);
+	sprite->setOrigin(sprite->getLocalBounds().width / 4, sprite->getLocalBounds().height / 4);
 	target.draw(*sprite);
 
 	/*sf::RectangleShape rect;

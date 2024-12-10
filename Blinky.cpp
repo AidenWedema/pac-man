@@ -1,7 +1,7 @@
 #include "Blinky.h"
 #include "Game.h"
 
-Blinky::Blinky()
+Blinky::Blinky(Vector2 pos) : Ghost(pos)
 {
 	color = sf::Color::Color(255, 0, 0, 255);
 

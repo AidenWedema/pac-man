@@ -11,6 +11,7 @@
 #include "Inky.h"
 #include "Clyde.h"
 #include "Music.h"
+#include "Player.h"
 
 class Game
 {

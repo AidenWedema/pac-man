@@ -1,7 +1,7 @@
 #include "Clyde.h"
 #include "Game.h"
 
-Clyde::Clyde()
+Clyde::Clyde(Vector2 pos) : Ghost(pos)
 {
 	color = sf::Color::Color(255, 183, 81, 255);
 

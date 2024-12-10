@@ -4,7 +4,7 @@
 class Blinky : public Ghost
 {
 public:
-	Blinky();
+	Blinky(Vector2 position);
 	~Blinky();
 
 private:

@@ -1,7 +1,7 @@
 #include "Inky.h"
 #include "Game.h"
 
-Inky::Inky(Blinky* blinky)
+Inky::Inky(Vector2 pos, Blinky* blinky) : Ghost(pos)
 {
 	this->blinky = blinky;
 	

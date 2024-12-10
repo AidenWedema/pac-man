@@ -72,6 +72,9 @@ public:
 	uint16_t GetResolution() { return resolution; }
 	void SetResolution(uint16_t resolution) { this->resolution = resolution; }
 
+	Node* GetSpawn() { return spawn; }	// Get the spawn node
+	Node* GetHouse() { return house; }	// Get the house node
+
 private:
 	Maze();
 	~Maze() {};
