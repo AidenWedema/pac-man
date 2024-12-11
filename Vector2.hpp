@@ -88,28 +88,28 @@ public:
 	}
 
 	float Distance(const Vector2& other) const {
-		return std::sqrt((x - other.x) * (x - other.x) + (y - other.y) * (y - other.y));
+		return (float)std::sqrt((x - other.x) * (x - other.x) + (y - other.y) * (y - other.y));
 	}
 
 	static float Distance(const Vector2& v1, const Vector2& v2) {
-		return std::sqrt((v1.x - v2.x) * (v1.x - v2.x) + (v1.y - v2.y) * (v1.y - v2.y));
+		return (float)std::sqrt((v1.x - v2.x) * (v1.x - v2.x) + (v1.y - v2.y) * (v1.y - v2.y));
 	}
 
 	Vector2 RotateAround(const Vector2& center, float degrees) const
 	{
 		// Convert degrees to radians
-		float radians = degrees * (M_PI / 180.0f);
+		float radians = (float)(degrees * (M_PI / 180.0f));
 
 		// Translate the point to rotate around the center (make center the origin)
-		float translatedX = x - center.x;
-		float translatedY = y - center.y;
+		float translatedX = (float)(x - center.x);
+		float translatedY = (float)(y - center.y);
 
 		// Apply rotation formulas
 		float rotatedX = translatedX * std::cos(radians) - translatedY * std::sin(radians);
 		float rotatedY = translatedX * std::sin(radians) + translatedY * std::cos(radians);
 
 		// Translate the point back
-		return Vector2(rotatedX + center.x, rotatedY + center.y);
+		return Vector2((int8_t)(rotatedX + center.x), (int8_t)(rotatedY + center.y));
 	}
 
 	std::string toString()

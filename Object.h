@@ -12,7 +12,7 @@ public:
 	virtual void Draw(sf::RenderTarget& target) {};
 
 	void SetPosition(Vector2 pos) { position = pos; }
-	void SetPosition(int x, int y) { this->x = x; this->y = y; }
+	void SetPosition(int x, int y) { this->x = (float)x; this->y = (float)y; }
 	Vector2 GetPosition() { return position; }
 
 	void SetDirection(Directions dir) { direction = dir; }

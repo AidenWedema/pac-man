@@ -3,6 +3,8 @@
 
 Ghost::Ghost(Vector2 pos)
 {
+	homeTimer = 0;
+	sprite = nullptr;
 	state = CHASE;
 	speed = 1.0f;
 	position = pos;
