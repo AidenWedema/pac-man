@@ -255,9 +255,6 @@ void Game::Run()
 
         pacman->Draw(window);
 
-#ifndef _DEBUG
-        window.display();
-#endif
         // spin until minimum delta time has passed
         auto spinstart = std::chrono::high_resolution_clock::now();
         do
@@ -274,8 +271,8 @@ void Game::Run()
         fpsText.setString("FPS: " + std::to_string(1.0f / deltaTime) + "\nDelta Time: " + std::to_string(deltaTime)
             + "\nSpin Time: " + std::to_string(spintime) + "\nTime spent spinning: " + std::to_string(spintime / deltaTime * 100.0f) + "%" + "\nRNG: " + std::to_string(RNG::seed));
         window.draw(fpsText);
-        window.display();
 #endif
+        window.display();
     }
 }
 

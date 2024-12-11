@@ -53,6 +53,13 @@ public:
 		sprite->setTexture(*texture);
 	};
 
+	// Set the animation with the specified name as the current animation without resetting the index, timer and reverse
+	void setAnimationNoReset(std::string name) {
+		currentAnimation = animations[name];
+		sf::Texture* texture = currentAnimation->frames->at(index);
+		sprite->setTexture(*texture);
+	}
+
 	void nextFrame() {
 		index = index + (reverse ? -1 : 1);
 		if (index >= currentAnimation->frames->size() || index < 0)

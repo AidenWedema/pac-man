@@ -16,6 +16,7 @@ Inky::Inky(Vector2 pos, Blinky* blinky) : Ghost(pos)
 
 	state = HOME;
 	homeTimer = 420; // 7 seconds
+	animationController.setAnimation("UP");
 }
 
 Inky::~Inky()

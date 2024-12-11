@@ -71,11 +71,13 @@ void Ghost::Draw(sf::RenderTarget& target)
 	sprite->setPosition(x, y);
 	target.draw(*sprite);
 
+#ifdef _DEBUG
 	sf::RectangleShape rect;
 	rect.setPosition(position.x * Maze::GetInstance()->GetResolution(), position.y * Maze::GetInstance()->GetResolution());
 	rect.setSize(sf::Vector2f(Maze::GetInstance()->GetResolution() * 0.8f, Maze::GetInstance()->GetResolution() * 0.8f));
 	rect.setFillColor(color);
 	target.draw(rect);
+#endif // _DEBUG
 }
 
 void Ghost::SetState(States s)
@@ -128,11 +130,13 @@ void Ghost::Eaten()
 
 void Ghost::Move()
 {
-	Vector2 dir = Vector2::DirectionToVector(direction);
-	x = x + dir.x * speed;
-	y = y + dir.y * speed;
-
 	int res = Maze::GetInstance()->GetResolution();
+
+	Vector2 dir = direction;
+	float spd = res / 8;
+	x += dir.x * speed * spd;
+	y += dir.y * speed * spd;
+
 	if (moveTarget.x * res == x && moveTarget.y * res == y)
 	{
 		position = moveTarget;
@@ -143,19 +147,22 @@ void Ghost::Move()
 		{
 			position = node->connections[direction]->position;
 			moveTarget = node->connections[direction]->connections[direction]->position;
-			x = position.x * Maze::GetInstance()->GetResolution();
-			y = position.y * Maze::GetInstance()->GetResolution();
+			x = position.x * res;
+			y = position.y * res;
 		}
 	}
 }
 
 void Ghost::RandomMove()
 {
-	Vector2 dir = Vector2::DirectionToVector(direction);
-	x = x + dir.x * speed;
-	y = y + dir.y * speed;
+	int res = Maze::GetInstance()->GetResolution();
 
-	if (x / Maze::GetInstance()->GetResolution() == moveTarget.x && y / Maze::GetInstance()->GetResolution() == moveTarget.y)
+	Vector2 dir = direction;
+	float spd = res / 8;
+	x += dir.x * speed * spd;
+	y += dir.y * speed * spd;
+
+	if (moveTarget.x * res == x && moveTarget.y * res == y)
 	{
 		position = moveTarget;
 		std::vector<Directions> directions = GetMoveableDirections();
@@ -167,8 +174,8 @@ void Ghost::RandomMove()
 		{
 			position = node->connections[direction]->position;
 			moveTarget = node->connections[direction]->connections[direction]->position;
-			x = position.x * Maze::GetInstance()->GetResolution();
-			y = position.y * Maze::GetInstance()->GetResolution();
+			x = position.x * res;
+			y = position.y * res;
 		}
 	}
 }

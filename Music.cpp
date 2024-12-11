@@ -21,10 +21,6 @@ void Music::PlayMusic(std::string path)
 
     music->setLoop(true);
     music->play();
-
-    if (music->getStatus() == sf::SoundSource::Playing) {
-        std::cout << "Music is playing successfully!" << std::endl;
-    }
 }
 
 void Music::StopMusic()

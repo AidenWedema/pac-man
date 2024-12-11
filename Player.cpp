@@ -6,9 +6,10 @@ Player::Player()
 {
 	speed = 1.0f;
 	direction = RIGHT;
+	bufferDirection = RIGHT;
 	
-	position = Vector2(13, 26);
-	moveTarget = Vector2(14,26);
+	position = Maze::GetInstance()->GetSpawn()->position;
+	moveTarget = position + direction;
 	x = position.x * Maze::GetInstance()->GetResolution();
 	y = position.y * Maze::GetInstance()->GetResolution();
 
@@ -40,7 +41,7 @@ void Player::Update()
 
 	std::string dirStr = Vector2::DirectionToString(direction);
 	if (animations.getCurrent()->name != dirStr)
-		animations.setAnimation(dirStr);
+		animations.setAnimationNoReset(dirStr);
 	
 	Move();
 }
@@ -76,8 +77,9 @@ void Player::Move()
 
 	// Move towards the target
 	Vector2 dirVec = direction;
-	x += dirVec.x * speed;
-	y += dirVec.y * speed;
+	float spd = resolution / 8;
+	x += dirVec.x * speed * spd;
+	y += dirVec.y * speed * spd;
 }
 
 void Player::Draw(sf::RenderTarget& target)
@@ -93,9 +95,11 @@ void Player::Draw(sf::RenderTarget& target)
 	sprite->setOrigin(sprite->getLocalBounds().width / 4, sprite->getLocalBounds().height / 4);
 	target.draw(*sprite);
 
-	/*sf::RectangleShape rect;
+#ifdef _DEBUG
+	sf::RectangleShape rect;
 	rect.setPosition(position.x * Maze::GetInstance()->GetResolution(), position.y * Maze::GetInstance()->GetResolution());
 	rect.setSize(sf::Vector2f(Maze::GetInstance()->GetResolution() * 0.8f, Maze::GetInstance()->GetResolution() * 0.8f));
 	rect.setFillColor(sf::Color::Yellow);
-	target.draw(rect);*/
+	target.draw(rect);
+#endif // _DEBUG
 }

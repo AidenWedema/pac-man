@@ -21,6 +21,6 @@ public:
 protected:
 	Vector2 position;
 	Directions direction;
-	int x;
-	int y;
+	float x;
+	float y;
 };
