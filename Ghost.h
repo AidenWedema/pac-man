@@ -8,7 +8,7 @@ class Ghost : public Object
 {
 public:
 	Ghost(Vector2 position);
-	~Ghost() {};
+	~Ghost() { delete sprite; };
 
 	enum States
 	{

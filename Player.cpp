@@ -71,8 +71,12 @@ void Player::Move()
 		}
 		else {
 			// If we can't move, stay on the current tile
+			node = nullptr;
+			delete node; // deletes nodes from maze, making 
 			return;
 		}
+		node = nullptr;
+		delete node;
 	}
 
 	// Move towards the target
@@ -95,6 +99,8 @@ void Player::Draw(sf::RenderTarget& target)
 	sprite->setOrigin(sprite->getLocalBounds().width / 4, sprite->getLocalBounds().height / 4);
 	target.draw(*sprite);
 
+	sprite = nullptr;
+	delete sprite;
 #ifdef _DEBUG
 	sf::RectangleShape rect;
 	rect.setPosition(position.x * Maze::GetInstance()->GetResolution(), position.y * Maze::GetInstance()->GetResolution());

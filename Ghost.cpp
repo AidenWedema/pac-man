@@ -150,6 +150,8 @@ void Ghost::Move()
 			x = position.x * res;
 			y = position.y * res;
 		}
+		node = nullptr;
+		delete node;
 	}
 }
 
@@ -177,6 +179,8 @@ void Ghost::RandomMove()
 			x = position.x * res;
 			y = position.y * res;
 		}
+		node = nullptr;
+		delete node;
 	}
 }
 
@@ -197,7 +201,9 @@ std::vector<Directions> Ghost::GetMoveableDirections()
 	}
 	for (Directions d : forbidden)
 		directions.erase(std::find(directions.begin(), directions.end(), d));
-
+	
+	node = nullptr;
+	delete node;
 	return directions;
 }
 

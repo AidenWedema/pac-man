@@ -70,6 +70,8 @@ void Maze::Draw(sf::RenderWindow* window)
 				sf::Vertex(sf::Vector2f(neighborPos.x * resolution + resolution / 2, neighborPos.y * resolution + resolution / 2), color)
 			};
 			window->draw(line, 2, sf::Lines);
+            neighbor = nullptr;
+            delete neighbor;
         }
     }
 #endif // _DEBUG
@@ -122,6 +124,8 @@ void Maze::ConnectNodes()
                 currentNode->AddConnection(Directions::UP, grid[y - 1][x]);
             else if (y - 1 < 0) // Wrap around to the bottom edge
                 CreateWarp(currentNode, grid[rows - 1][x], Directions::UP);
+            currentNode = nullptr;
+            delete currentNode;
         }
     }
 }

@@ -28,7 +28,7 @@ void Clyde::CalculateTarget()
 		target = scatterTarget;
 	else
 		target = Game::GetInstance()->debugGhostTarget; // placeholder, change to pacman position later
-#ifdef FALSE
+#ifdef _DEBUG
 	sf::Color c = color;
 	c.a = 128;
 	sf::CircleShape radius;

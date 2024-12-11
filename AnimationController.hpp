@@ -9,7 +9,7 @@ class AnimationController
 {
 public:
 	AnimationController() { index = 0; timer = 0; sprite = new sf::Sprite(); reverse = false; currentAnimation = nullptr; };
-	~AnimationController() {};
+	~AnimationController() { delete sprite; delete currentAnimation;  for (auto animation : animations) delete animation.second; };
 
 	struct Animation
 	{
@@ -41,6 +41,7 @@ public:
 		auto anim = animations.find(name);
 		if (anim != animations.end())
 			animations.erase(anim);
+		//delete anim->second;
 	};
 
 	// Set the animation with the specified name as the current animation
