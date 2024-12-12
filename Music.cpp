@@ -25,5 +25,18 @@ void Music::PlayMusic(std::string path)
 
 void Music::StopMusic()
 {
+    music->stop();
+}
 
+void Music::PlaySound(std::string path)
+{
+    buffer = new sf::SoundBuffer();
+    if (!buffer->loadFromFile(path))
+    {
+        std::cout << "error" << std::endl;
+    }
+
+    sound->setBuffer(*buffer);
+
+    sound->play();
 }
