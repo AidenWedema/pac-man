@@ -4,6 +4,7 @@
 #include "RNG.h"
 #include "Maze.h"
 #include "AnimationController.hpp"
+#include "Time.h"
 class Ghost : public Object
 {
 public:

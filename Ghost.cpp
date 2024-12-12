@@ -5,7 +5,7 @@ Ghost::Ghost(Vector2 pos)
 {
 	homeTimer = 0;
 	sprite = nullptr;
-	state = CHASE;
+	state = SCATTER;
 	speed = 1.0f;
 	position = pos;
 	x = position.x * Maze::GetInstance()->GetResolution();
@@ -141,6 +141,12 @@ void Ghost::Move()
 
 	if (moveTarget.x * res == x && moveTarget.y * res == y)
 	{
+		// Toggle between scatter and chase
+		if (Time::GetInstance()->frameCount % 1200 > 420 && state == SCATTER)
+			SetState(CHASE);
+		else if (Time::GetInstance()->frameCount % 1200 < 420 && state == CHASE)
+			SetState(SCATTER);
+
 		position = moveTarget;
 		direction = GetShortestDirection();
 		Maze::Node* node = Maze::GetInstance()->GetNode(position);

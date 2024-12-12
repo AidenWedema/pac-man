@@ -12,6 +12,7 @@
 #include "Clyde.h"
 #include "Music.h"
 #include "Player.h"
+#include "Time.h"
 
 class Game
 {

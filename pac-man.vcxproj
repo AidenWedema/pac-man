@@ -147,6 +147,7 @@
     <ClCompile Include="Pinky.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="RNG.cpp" />
+    <ClCompile Include="Time.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AnimationController.hpp" />
@@ -162,6 +163,7 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="RNG.h" />
     <ClInclude Include="Scoreboard.hpp" />
+    <ClInclude Include="Time.h" />
     <ClInclude Include="Vector2.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
