@@ -1,6 +1,8 @@
 #pragma once
 #include "Object.h"
 #include "AnimationController.hpp"
+#include "Maze.h"
+
 
 class Player : public Object
 {
@@ -15,6 +17,9 @@ public:
 	Vector2 moveTarget;
 
 	Directions bufferDirection;
+
+	void Eat(Maze::Node*);
+	int palletCount;
 
 	void Move();
 	void Draw();

@@ -5,6 +5,7 @@
 #include <unordered_map>
 #include <SFML/Graphics.hpp>
 #include "Vector2.hpp"
+/*#include "Pellet.h"*/
 
 enum Tiles
 {
@@ -72,8 +73,7 @@ public:
 	uint16_t GetResolution() { return resolution; }
 	void SetResolution(uint16_t resolution) { this->resolution = resolution; }
 
-	Node* GetSpawn() { return spawn; }	// Get the spawn node
-	Node* GetHouse() { return house; }	// Get the house node
+	int GetPalletCounter();
 
 private:
 	Maze();
@@ -86,6 +86,8 @@ private:
 	std::vector<std::tuple<sf::Sprite*, sf::Texture*>*> tiles;
 	Node* spawn;
 	Node* house;
+
+	int palletCounter;
 
 	void ConnectNodes();
 	void CreateWarp(Node*, Node*, Directions);
