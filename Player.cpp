@@ -1,6 +1,4 @@
 #include "Player.h"
-#include "Maze.h"
-
 
 Player::Player() 
 {
@@ -54,6 +52,8 @@ void Player::Move()
 	if (x == moveTarget.x * resolution && y == moveTarget.y * resolution) {
 		position = moveTarget;  // Update tile position
 		Maze::Node* node = Maze::GetInstance()->GetNode(position);
+		if (node->pellet)
+			Eat(node);
 
 		if (node->connections.find(bufferDirection) != node->connections.end())
 			direction = bufferDirection;
@@ -84,6 +84,17 @@ void Player::Move()
 	float spd = resolution / 8;
 	x += dirVec.x * speed * spd;
 	y += dirVec.y * speed * spd;
+}
+
+void Player::Eat(Maze::Node* node)
+{
+	node->pellet = false;
+	palletCount++;
+
+	if (palletCount == Maze::GetInstance()->GetPelletCounter())
+	{
+		std::cout << "YOU WIN" << std::endl; // placeholder
+	}
 }
 
 void Player::Draw(sf::RenderTarget& target)

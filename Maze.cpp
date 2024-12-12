@@ -152,6 +152,8 @@ void Maze::CreateWarp(Node* from, Node* to, Directions direction)
 
 void Maze::MazeFromString(std::string level)
 {
+    pelletCounter = 0;
+
     char t[] = { ' ', '=', '#', 'I', 'H', '<', '{', '>', '}', 'q', 'p', 'd', 'b', 'y','t',
         'k', 'x', '!', 'i', '-', '_', 'f', '(', 'z', ')', '$', '%', '€', '^', ']', '[', '@'};
 
@@ -207,6 +209,7 @@ void Maze::MazeFromString(std::string level)
             if (!isPellet && !isSuper)
 			    continue;
             index = 99 + isPellet + isSuper; // set the index to load the correct sprite. (100 for pellet, 101 for powerpellet)
+            pelletCounter += isPellet;
         }
         // load the tile from "assets/sprites/maze tiles/"
         sf::Sprite* sprite = new sf::Sprite();

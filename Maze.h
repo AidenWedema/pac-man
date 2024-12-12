@@ -75,6 +75,8 @@ public:
 	Node* GetSpawn() { return spawn; }	// Get the spawn node
 	Node* GetHouse() { return house; }	// Get the house node
 
+	int GetPelletCounter() { return pelletCounter; }	// Get the pellet counter.
+
 private:
 	Maze();
 	~Maze() {};
@@ -86,6 +88,7 @@ private:
 	std::vector<std::tuple<sf::Sprite*, sf::Texture*>*> tiles;
 	Node* spawn;
 	Node* house;
+	int pelletCounter;
 
 	void ConnectNodes();
 	void CreateWarp(Node*, Node*, Directions);
