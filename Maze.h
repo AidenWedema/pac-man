@@ -77,6 +77,8 @@ public:
 
 	int GetPelletCounter() { return pelletCounter; }	// Get the pellet counter.
 
+	void UpdateTile(Vector2 position, int newTileIndex);
+
 private:
 	Maze();
 	~Maze() {};

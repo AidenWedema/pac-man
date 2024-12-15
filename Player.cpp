@@ -91,6 +91,9 @@ void Player::Eat(Maze::Node* node)
 	node->pellet = false;
 	palletCount++;
 
+	// Update the tile to a blank tile
+	Maze::GetInstance()->UpdateTile(node->position, 0);
+
 	if (palletCount == Maze::GetInstance()->GetPelletCounter())
 	{
 		std::cout << "YOU WIN" << std::endl; // placeholder

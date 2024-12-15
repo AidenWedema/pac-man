@@ -150,6 +150,27 @@ void Maze::CreateWarp(Node* from, Node* to, Directions direction)
 	warp2->AddConnection(opposite, warp1);
 }
 
+void Maze::UpdateTile(Vector2 position, int newTileIndex)
+{
+    // Find the tile at the given position
+    for (std::tuple<sf::Sprite*, sf::Texture*>* tile : tiles)
+    {
+        sf::Sprite* sprite = std::get<0>(*tile);
+        if (sprite->getPosition() == sf::Vector2f(position.x * resolution, position.y * resolution))
+        {
+            // Update the texture of the tile
+            sf::Texture* texture = std::get<1>(*tile);
+            if (!texture->loadFromFile("assets/sprites/maze tiles/tile_" + std::to_string(newTileIndex) + ".png"))
+            {
+                std::cout << "Failed to load tile_" << newTileIndex << ".png" << std::endl;
+                return;
+            }
+            sprite->setTexture(*texture);
+            break;
+        }
+    }
+}
+
 void Maze::MazeFromString(std::string level)
 {
     pelletCounter = 0;
