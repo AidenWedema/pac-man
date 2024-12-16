@@ -144,13 +144,14 @@ void Ghost::Move()
 
 	if (moveTarget.x * res == x && moveTarget.y * res == y)
 	{
+		position = moveTarget;
+
 		// Toggle between scatter and chase
 		if (Time::GetInstance()->frameCount % 1200 > 420 && state == SCATTER)
 			SetState(CHASE);
 		else if (Time::GetInstance()->frameCount % 1200 < 420 && state == CHASE)
 			SetState(SCATTER);
 
-		position = moveTarget;
 		direction = GetShortestDirection();
 		Maze::Node* node = Maze::GetInstance()->GetNode(position);
 		moveTarget = node->connections[direction]->position;
@@ -242,7 +243,7 @@ void Ghost::CheckPacmanDistance()
 	Player* pacman = Game::GetInstance()->GetPacman();
 	Vector2 pacmanPosition = pacman->GetPosition();
 	float distance = position.Distance(pacmanPosition);
-	if (distance >= 1)
+	if (distance >= 2)
 		return;
 	// Check if pacman is close to the ghost via pixel positions
 	int res = Maze::GetInstance()->GetResolution();
