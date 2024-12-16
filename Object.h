@@ -14,6 +14,8 @@ public:
 	void SetPosition(Vector2 pos) { position = pos; }
 	void SetPosition(int x, int y) { this->x = (float)x; this->y = (float)y; }
 	Vector2 GetPosition() { return position; }
+	float GetX() { return x; }
+	float GetY() { return y; }
 
 	void SetDirection(Directions dir) { direction = dir; }
 	Directions GetDirection() { return direction; }

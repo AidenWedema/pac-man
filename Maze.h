@@ -75,6 +75,10 @@ public:
 
 	int GetPalletCounter();
 
+	int GetPelletCounter() { return pelletCounter; }	// Get the pellet counter.
+
+	void UpdateTile(Vector2 position, int newTileIndex);
+
 private:
 	Maze();
 	~Maze() {};
@@ -86,6 +90,7 @@ private:
 	std::vector<std::tuple<sf::Sprite*, sf::Texture*>*> tiles;
 	Node* spawn;
 	Node* house;
+	int pelletCounter;
 
 	int palletCounter;
 

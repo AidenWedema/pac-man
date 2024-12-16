@@ -12,7 +12,11 @@ Game* Game::GetInstance()
 void Game::Start()
 {
     window.create(sf::VideoMode(224, 288), "Pac-man", sf::Style::Close);
-
+    Time* time = Time::GetInstance();
+    time->fps = 60;
+    time->minDelta = 1.0f / time->fps;
+    time = nullptr;
+    delete time;
     while (true)
     {
         switch (gameState)
@@ -82,8 +86,8 @@ void Game::Menu()
     AidenPointerV1.setPosition(center - 50, 180);
     AidenPointerV1.setRotation(180);
 
-    float minDelta = 1.0f / 60;
-    float deltaTime = 0;
+    Time* time = Time::GetInstance();
+    time->deltaTime = 0;
     while (window.isOpen()){
         sf::Event event;
         while (window.pollEvent(event))
@@ -176,11 +180,14 @@ void Game::Menu()
         {
             auto end = std::chrono::high_resolution_clock::now();
             auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
-            deltaTime = duration.count() / 1000000.0f; // convert to seconds
-        } while (deltaTime < minDelta);
+            time->deltaTime = duration.count() / 1000000.0f; // convert to seconds
+        } while (time->deltaTime < time->minDelta);
 
         window.display();
+        time->frameCount++;
     }
+    time = nullptr;
+    delete time;
 }
 
 void Game::Run()
@@ -201,6 +208,7 @@ void Game::Run()
     fpsText.setFillColor(sf::Color::White); // Text color
     fpsText.setPosition(10, 10);            // Position on screen (top-left corner)
 #endif
+    running = true;
     Music::GetInstance()->PlayMusic("assets/audio/main-theme-game.ogg");
     Maze::GetInstance()->LoadMaze(0);
     // TEST
@@ -208,7 +216,7 @@ void Game::Run()
     debugGhostDirection = Directions::RIGHT;
     Vector2 pacSpawn = Maze::GetInstance()->GetSpawn()->position;
     Vector2 ghostHouse = Maze::GetInstance()->GetHouse()->position;
-    Player* pacman = new Player();
+    pacman = new Player();
     Blinky* blinky = new Blinky(ghostHouse);
     Pinky* pinky = new Pinky(ghostHouse + Vector2(0, 3));
 	Inky* inky = new Inky(ghostHouse + Vector2(-2, 3), blinky);
@@ -218,9 +226,9 @@ void Game::Run()
     pacman->SetPosition(pacSpawn);
 	pacman->SetPosition(pacSpawn.x * resolution, pacSpawn.y * resolution);
     
-    float minDelta = 1.0f / 60;
-    float deltaTime = 0;
-    while (window.isOpen())
+    Time* time = Time::GetInstance();
+    time->frameCount = 0;
+    while (window.isOpen() && running)
     {
         sf::Event event;
         while (window.pollEvent(event))
@@ -261,21 +269,81 @@ void Game::Run()
         {
             auto end = std::chrono::high_resolution_clock::now();
             auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
-            deltaTime = duration.count() / 1000000.0f; // convert to seconds
-        } while (deltaTime < minDelta);
+            time->deltaTime = duration.count() / 1000000.0f; // convert to seconds
+        } while (time->deltaTime < time->minDelta);
 
 #ifdef _DEBUG
         auto end = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - spinstart);
         float spintime = duration.count() / 1000000.0f;
-        fpsText.setString("FPS: " + std::to_string(1.0f / deltaTime) + "\nDelta Time: " + std::to_string(deltaTime)
-            + "\nSpin Time: " + std::to_string(spintime) + "\nTime spent spinning: " + std::to_string(spintime / deltaTime * 100.0f) + "%" + "\nRNG: " + std::to_string(RNG::seed));
+        fpsText.setString("FPS: " + std::to_string(1.0f / time->deltaTime) + "\nDelta Time: " + std::to_string(time->deltaTime)
+            + "\nSpin Time: " + std::to_string(spintime) + "\nTime spent spinning: " + 
+            std::to_string(spintime / time->deltaTime * 100.0f) + "%" + "\nRNG: " + std::to_string(RNG::seed) + 
+            "\nFrame Count: " + std::to_string(time->frameCount));
         window.draw(fpsText);
 #endif
         window.display();
+        time->frameCount++;
     }
+    // delete all pointers
+	blinky = nullptr;
+	pinky = nullptr;
+	inky = nullptr;
+	clyde = nullptr;
+    time = nullptr;
+	delete blinky;
+	delete pinky;
+	delete inky;
+	delete clyde;
+	delete time;
 }
 
 void Game::GameOver()
 {
+    pacman->animations.setAnimation("die");
+    int frameCount = pacman->animations.getLength();
+    Time* time = Time::GetInstance();
+    while (window.isOpen())
+    {
+        sf::Event event;
+        while (window.pollEvent(event))
+        {
+            if (event.type == sf::Event::Closed)
+            {
+                window.close();
+                gameState = Game::CLOSE;
+            }
+            if (event.type == sf::Event::Resized)
+                window.setView(sf::View(sf::FloatRect(0, 0, event.size.width, event.size.height)));
+        }
+        auto start = std::chrono::high_resolution_clock::now();
+        window.clear();
+
+        pacman->animations.Update();
+
+        if (pacman->animations.getIndex() == frameCount - 1)
+		{
+			gameState = MENU;
+		}
+		if (pacman->animations.getIndex() == 0 && gameState == MENU)
+		{
+			running = false;
+			break;
+		}
+
+        Maze::GetInstance()->Draw(&window);
+
+        pacman->Draw(window);
+
+        // spin until minimum delta time has passed
+        auto spinstart = std::chrono::high_resolution_clock::now();
+        do
+        {
+            auto end = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+            time->deltaTime = duration.count() / 1000000.0f; // convert to seconds
+        } while (time->deltaTime < time->minDelta);
+
+        window.display();
+    }
 }
