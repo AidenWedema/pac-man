@@ -51,6 +51,7 @@ protected:
 	void RandomMove();
 	std::vector<Directions> GetMoveableDirections();
 	Directions GetShortestDirection();
+	void CheckPacmanDistance();
 	void SetAnimation();
 	void DrawGhostPath();
 };

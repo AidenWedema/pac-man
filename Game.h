@@ -17,12 +17,15 @@
 class Game
 {
 public:
+	~Game() { delete pacman; };
+
 	static Game* instance;
 	static Game* GetInstance();
 
 	enum GameState { CLOSE, MENU, GAME };
 
 	sf::RenderWindow window;
+
 
 	Vector2 debugGhostTarget = Vector2(8, 20);
 	Directions debugGhostDirection = Directions::RIGHT;
@@ -35,9 +38,12 @@ public:
 	void SetGameState(GameState state) { gameState = state; }
 	GameState GetGameState() const { return gameState; }
 
+	Player* GetPacman() { return pacman; }
+
 private:
 	Game() {};
-	~Game() {};
 
 	GameState gameState = MENU;
+	Player* pacman;
+	bool running;
 };

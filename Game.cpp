@@ -208,6 +208,7 @@ void Game::Run()
     fpsText.setFillColor(sf::Color::White); // Text color
     fpsText.setPosition(10, 10);            // Position on screen (top-left corner)
 #endif
+    running = true;
     Music::GetInstance()->PlayMusic("assets/audio/main-theme-game.ogg");
     Maze::GetInstance()->LoadMaze(0);
     // TEST
@@ -215,7 +216,7 @@ void Game::Run()
     debugGhostDirection = Directions::RIGHT;
     Vector2 pacSpawn = Maze::GetInstance()->GetSpawn()->position;
     Vector2 ghostHouse = Maze::GetInstance()->GetHouse()->position;
-    Player* pacman = new Player();
+    pacman = new Player();
     Blinky* blinky = new Blinky(ghostHouse);
     Pinky* pinky = new Pinky(ghostHouse + Vector2(0, 3));
 	Inky* inky = new Inky(ghostHouse + Vector2(-2, 3), blinky);
@@ -227,7 +228,7 @@ void Game::Run()
     
     Time* time = Time::GetInstance();
     time->frameCount = 0;
-    while (window.isOpen())
+    while (window.isOpen() && running)
     {
         sf::Event event;
         while (window.pollEvent(event))
@@ -285,13 +286,11 @@ void Game::Run()
         time->frameCount++;
     }
     // delete all pointers
-    pacman = nullptr;
 	blinky = nullptr;
 	pinky = nullptr;
 	inky = nullptr;
 	clyde = nullptr;
     time = nullptr;
-	delete pacman;
 	delete blinky;
 	delete pinky;
 	delete inky;
@@ -301,4 +300,50 @@ void Game::Run()
 
 void Game::GameOver()
 {
+    pacman->animations.setAnimation("die");
+    int frameCount = pacman->animations.getLength();
+    Time* time = Time::GetInstance();
+    while (window.isOpen())
+    {
+        sf::Event event;
+        while (window.pollEvent(event))
+        {
+            if (event.type == sf::Event::Closed)
+            {
+                window.close();
+                gameState = Game::CLOSE;
+            }
+            if (event.type == sf::Event::Resized)
+                window.setView(sf::View(sf::FloatRect(0, 0, event.size.width, event.size.height)));
+        }
+        auto start = std::chrono::high_resolution_clock::now();
+        window.clear();
+
+        pacman->animations.Update();
+
+        if (pacman->animations.getIndex() == frameCount - 1)
+		{
+			gameState = MENU;
+		}
+		if (pacman->animations.getIndex() == 0 && gameState == MENU)
+		{
+			running = false;
+			break;
+		}
+
+        Maze::GetInstance()->Draw(&window);
+
+        pacman->Draw(window);
+
+        // spin until minimum delta time has passed
+        auto spinstart = std::chrono::high_resolution_clock::now();
+        do
+        {
+            auto end = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+            time->deltaTime = duration.count() / 1000000.0f; // convert to seconds
+        } while (time->deltaTime < time->minDelta);
+
+        window.display();
+    }
 }

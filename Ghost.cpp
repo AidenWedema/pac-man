@@ -22,7 +22,7 @@ Ghost::Ghost(Vector2 pos)
 void Ghost::Update()
 {
 #ifdef _DEBUG // Draw path to target
-	DrawGhostPath();
+	//DrawGhostPath();
 #endif // _DEBUG
 
 	SetAnimation();
@@ -109,17 +109,20 @@ void Ghost::Chase()
 {
 	CalculateTarget();
 	Move();
+	CheckPacmanDistance();
 }
 
 void Ghost::Scatter()
 {
 	target = scatterTarget;
 	Move();
+	CheckPacmanDistance();
 }
 
 void Ghost::Frightend()
 {
 	RandomMove();
+	CheckPacmanDistance();
 }
 
 void Ghost::Eaten()
@@ -231,6 +234,28 @@ Directions Ghost::GetShortestDirection()
 	}
 	
 	return dir;
+}
+
+void Ghost::CheckPacmanDistance()
+{
+	// Check if pacman is close to the ghost via tile positions
+	Player* pacman = Game::GetInstance()->GetPacman();
+	Vector2 pacmanPosition = pacman->GetPosition();
+	float distance = position.Distance(pacmanPosition);
+	if (distance >= 1)
+		return;
+	// Check if pacman is close to the ghost via pixel positions
+	int res = Maze::GetInstance()->GetResolution();
+	int pacmanX = pacman->GetX();
+	int pacmanY = pacman->GetY();
+	res /= 1.5f;
+	if (abs(x - pacmanX) > res || abs(y - pacmanY) > res)
+		return;
+	// If the ghost is frightened, pacman eats the ghost. Otherwise, pacman dies
+	if (state == FRIGHTEND)
+		SetState(EATEN);
+	else
+		Game::GetInstance()->GameOver();
 }
 
 void Ghost::SetAnimation()
