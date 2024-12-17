@@ -47,6 +47,8 @@ void Game::Menu()
     int scales[] = {8, 16, 24};
     int index = 0;
     bool pressed = false;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
+		pressed = true;
 
     sf::Font font;
     sf::Text TygoTexTV1;
@@ -104,7 +106,7 @@ void Game::Menu()
                 window.setView(sf::View(sf::FloatRect(0, 0, event.size.width, event.size.height)));
             if (event.type == sf::Event::KeyReleased)
             {
-				if (event.key.code == sf::Keyboard::Left || event.key.code == sf::Keyboard::Right)
+				if (event.key.code == sf::Keyboard::Left || event.key.code == sf::Keyboard::Right || event.key.code == sf::Keyboard::Enter)
                     pressed = false;
             }
         }
@@ -130,7 +132,7 @@ void Game::Menu()
             }
         }
 
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter) && !starting)
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter) && !starting && !pressed)
         {
             starting = true;
 			startTimer = 60;
@@ -268,7 +270,7 @@ void Game::Run()
 		inky->Update();
 		clyde->Update();
 
-		scoreText.setString("SCORE: " + std::to_string(scoreboard->GetScore()));
+		scoreText.setString("SCORE " + std::to_string(scoreboard->GetScore()));
 
         Maze::GetInstance()->Draw(&window);
 
@@ -406,6 +408,8 @@ void Game::End()
         text->setOrigin(bounds.width / 2, bounds.height / 2);
         text->setPosition((center / 4) + ((bounds.width * 2) * i), window.getSize().y / 4 * 3);
     }
+	ScoreTextScore.setPosition(center / 4 + ScoreTextScore.getLocalBounds().width / 2, window.getSize().y / 4 * 3 - ScoreTextScore.getLocalBounds().height * 1.5f);
+
     for (int i = 0; i < scoreboard.size(); i++)
     {
         sf::Text* text = scoreboard[i];
