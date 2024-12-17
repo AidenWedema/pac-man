@@ -29,6 +29,9 @@ void Game::Start()
         case Game::GAME:
             Run();
             break;
+        case Game::END:
+			End();
+			break;
         default:
             gameState = Game::MENU;
 			break;
@@ -222,10 +225,21 @@ void Game::Run()
 	Inky* inky = new Inky(ghostHouse + Vector2(-2, 3), blinky);
     Clyde* clyde = new Clyde(ghostHouse + Vector2(2, 3));
 
+    sf::Text scoreText;
+	sf::Font font;
+	if (!font.loadFromFile("assets/fonts/Emulogic.ttf"))
+		return;
+	scoreText.setFont(font);
+	scoreText.setCharacterSize(Maze::GetInstance()->GetResolution());
+	scoreText.setFillColor(sf::Color::White);
+	scoreText.setPosition(sf::Vector2f(Maze::GetInstance()->GetResolution(), Maze::GetInstance()->GetResolution()));
+
     int resolution = Maze::GetInstance()->GetResolution();
     pacman->SetPosition(pacSpawn);
 	pacman->SetPosition(pacSpawn.x * resolution, pacSpawn.y * resolution);
     
+    Scoreboard* scoreboard = Scoreboard::GetInstance();
+    scoreboard->ResetScore();
     Time* time = Time::GetInstance();
     time->frameCount = 0;
     while (window.isOpen() && running)
@@ -254,8 +268,11 @@ void Game::Run()
 		inky->Update();
 		clyde->Update();
 
+		scoreText.setString("SCORE: " + std::to_string(scoreboard->GetScore()));
+
         Maze::GetInstance()->Draw(&window);
 
+        window.draw(scoreText);
 		blinky->Draw(window);
 		pinky->Draw(window);
 		inky->Draw(window);
@@ -322,10 +339,8 @@ void Game::GameOver()
         pacman->animations.Update();
 
         if (pacman->animations.getIndex() == frameCount - 1)
-		{
-			gameState = MENU;
-		}
-		if (pacman->animations.getIndex() == 0 && gameState == MENU)
+			gameState = Game::END;
+		if (pacman->animations.getIndex() == 0 && gameState == Game::END)
 		{
 			running = false;
 			break;
@@ -346,4 +361,154 @@ void Game::GameOver()
 
         window.display();
     }
+}
+
+void Game::End()
+{
+    Music::GetInstance()->PlayMusic("assets/audio/main-theme-menu.ogg");
+    char letters[] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 
+                      //'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 
+                      '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '!', '?', '*'};
+    bool pressed = false;
+    uint8_t charIndex = 0;
+	uint8_t positionIndex = 0;
+    uint8_t timer = 0;
+
+    sf::Font font;
+    sf::Text ScoreTextChar1;
+    sf::Text ScoreTextChar2;
+    sf::Text ScoreTextChar3;
+    sf::Text ScoreTextScore;
+    sf::Text ScoreBoardText1;
+	sf::Text ScoreBoardText2;
+	sf::Text ScoreBoardText3;
+    std::vector<sf::Text*> texts = { &ScoreTextChar1, &ScoreTextChar2, &ScoreTextChar3, &ScoreTextScore };
+    std::vector<sf::Text*> scoreboard = { &ScoreBoardText1, &ScoreBoardText2, &ScoreBoardText3 };
+    // Load the Arial font from the assets folder
+    if (!font.loadFromFile("assets/fonts/Emulogic.ttf")) {
+        // Handle error if the font fails to load
+        std::cerr << "Error loading Arial font from assets/fonts/Emulogic.ttf" << std::endl;
+        return;
+    }
+    int resolution = Maze::GetInstance()->GetResolution();
+    int center = window.getSize().x / 2;
+    for (int i = 0; i < texts.size(); i++)
+    {
+        sf::Text* text = texts[i];
+        text->setFont(font);
+        text->setCharacterSize(resolution);              // Font size
+        text->setFillColor(sf::Color::White);            // Text color
+        if (i == texts.size() - 1)
+			text->setString(std::to_string(Scoreboard::GetInstance()->GetScore()));
+        else
+            text->setString("A");
+        sf::FloatRect bounds = text->getLocalBounds();
+        text->setOrigin(bounds.width / 2, bounds.height / 2);
+        text->setPosition((center / 4) + ((bounds.width * 2) * i), window.getSize().y / 4 * 3);
+    }
+    for (int i = 0; i < scoreboard.size(); i++)
+    {
+        sf::Text* text = scoreboard[i];
+        text->setFont(font);
+        text->setCharacterSize(resolution);              // Font size
+        text->setFillColor(sf::Color::White);            // Text color
+
+        auto entry = Scoreboard::GetInstance()->GetHighscores()[i];
+        std::string score;
+		for (char c : std::get<0>(entry))
+			score += c;
+        score += ": " + std::to_string(std::get<1>(entry));
+        text->setString(score);
+
+        sf::FloatRect bounds = text->getLocalBounds();
+        text->setOrigin(0, bounds.height / 2);
+        text->setPosition(center / 2, window.getSize().y / 4 + (bounds.height * 1.2f * i));
+    }
+
+    Time* time = Time::GetInstance();
+    time->deltaTime = 0;
+    while (window.isOpen()) {
+        sf::Event event;
+        while (window.pollEvent(event))
+        {
+            if (event.type == sf::Event::Closed)
+            {
+                window.close();
+                gameState = Game::CLOSE;
+            }
+            if (event.type == sf::Event::Resized)
+                window.setView(sf::View(sf::FloatRect(0, 0, event.size.width, event.size.height)));
+            if (event.type == sf::Event::KeyReleased)
+            {
+                if (event.key.code == sf::Keyboard::Left || event.key.code == sf::Keyboard::Right || event.key.code == sf::Keyboard::Up || event.key.code == sf::Keyboard::Down || event.key.code == sf::Keyboard::Enter)
+                    pressed = false;
+            }
+        }
+        auto start = std::chrono::high_resolution_clock::now();
+        window.clear();
+
+        timer += 4;
+		if (timer <= 64)
+			texts[positionIndex]->setFillColor(sf::Color::White);
+        else
+			texts[positionIndex]->setFillColor(sf::Color::Red);
+
+        if (!pressed) {
+            pressed = true;
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)) {
+                if (positionIndex < 2) {
+                    texts[positionIndex]->setFillColor(sf::Color::White);
+                    positionIndex++;
+                    charIndex = std::find(letters, letters + sizeof(letters), texts[positionIndex]->getString().toAnsiString()[0]) - letters;
+                }
+                else {
+                    Scoreboard::GetInstance()->AddScore(new char[3] {ScoreTextChar1.getString().toAnsiString()[0], ScoreTextChar2.getString().toAnsiString()[0], ScoreTextChar3.getString().toAnsiString()[0]}, Scoreboard::GetInstance()->GetScore());
+                    gameState = MENU;
+                    window.clear();
+                    window.display();
+                    break;
+                }
+            }
+            else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && positionIndex < 2) {
+                texts[positionIndex]->setFillColor(sf::Color::White);
+                positionIndex++;
+                charIndex = std::find(letters, letters + sizeof(letters), texts[positionIndex]->getString().toAnsiString()[0]) - letters;
+            }
+            else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && positionIndex > 0) {
+                texts[positionIndex]->setFillColor(sf::Color::White);
+                positionIndex--;
+                charIndex = std::find(letters, letters + sizeof(letters), texts[positionIndex]->getString().toAnsiString()[0]) - letters;
+            }
+            else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+				charIndex = (charIndex + 1) % sizeof(letters);
+				texts[positionIndex]->setString(letters[charIndex]);
+            }
+			else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+				charIndex = (charIndex - 1) % sizeof(letters);
+				texts[positionIndex]->setString(letters[charIndex]);
+            }
+            else
+				pressed = false;
+        }
+
+        for (sf::Text* text : texts)
+            window.draw(*text);
+
+        for (sf::Text* text : scoreboard)
+			window.draw(*text);
+
+        // spin until minimum delta time has passed
+        auto spinstart = std::chrono::high_resolution_clock::now();
+        do
+        {
+            auto end = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+            time->deltaTime = duration.count() / 1000000.0f; // convert to seconds
+        } while (time->deltaTime < time->minDelta);
+
+        window.display();
+        time->frameCount++;
+    }
+    time = nullptr;
+    delete time;
 }

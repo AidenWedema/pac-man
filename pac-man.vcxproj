@@ -147,6 +147,7 @@
     <ClCompile Include="Pinky.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="RNG.cpp" />
+    <ClCompile Include="ScoreBoard.cpp" />
     <ClCompile Include="Time.cpp" />
   </ItemGroup>
   <ItemGroup>

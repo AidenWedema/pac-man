@@ -2,6 +2,7 @@
 #include "Object.h"
 #include "AnimationController.hpp"
 #include "Maze.h"
+#include "Scoreboard.hpp"
 
 class Player : public Object
 {

@@ -90,6 +90,11 @@ void Player::Eat(Maze::Node* node)
 {
 	node->pellet = false;
 	palletCount++;
+	Scoreboard::GetInstance()->AddScore(10);
+	if (node->super) 
+	{
+		Scoreboard::GetInstance()->AddScore(40);
+	}
 
 	// Update the tile to a blank tile
 	Maze::GetInstance()->UpdateTile(node->position, 0);
