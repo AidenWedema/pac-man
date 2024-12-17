@@ -13,6 +13,7 @@
 #include "Music.h"
 #include "Player.h"
 #include "Time.h"
+#include "Scoreboard.hpp"
 
 class Game
 {
@@ -22,7 +23,7 @@ public:
 	static Game* instance;
 	static Game* GetInstance();
 
-	enum GameState { CLOSE, MENU, GAME };
+	enum GameState { CLOSE, MENU, GAME, END };
 
 	sf::RenderWindow window;
 
@@ -34,6 +35,7 @@ public:
 	void Menu();
 	void Run();
 	void GameOver();
+	void End();
 
 	void SetGameState(GameState state) { gameState = state; }
 	GameState GetGameState() const { return gameState; }
