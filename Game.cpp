@@ -44,11 +44,11 @@ void Game::Menu()
     Music::GetInstance()->PlayMusic("assets/audio/main-theme-menu.ogg");
     bool starting = false;
     int startTimer = 0;
-    int scales[] = {8, 16, 24};
+    int scales[] = { 8, 16, 24 };
     int index = 0;
     bool pressed = false;
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
-		pressed = true;
+        pressed = true;
 
     sf::Font font;
     sf::Text TygoTexTV1;
@@ -57,7 +57,7 @@ void Game::Menu()
     sf::Text AidenTexTV2;
     sf::Text AidenTexTV3;
     sf::CircleShape AidenPointerV1 = sf::CircleShape(10, 3);
-    std::vector<sf::Text*> texts = {&TygoTexTV1, &TygoTexTV2, &AidenTexTV1, &AidenTexTV2, &AidenTexTV3};
+    std::vector<sf::Text*> texts = { &TygoTexTV1, &TygoTexTV2, &AidenTexTV1, &AidenTexTV2, &AidenTexTV3 };
     // Load the Arial font from the assets folder
     if (!font.loadFromFile("assets/fonts/Emulogic.ttf")) {
         // Handle error if the font fails to load
@@ -74,9 +74,9 @@ void Game::Menu()
     for (int i = 0; i < texts.size(); i++)
     {
         sf::Text* text = texts[i];
-		text->setFont(font);
-		text->setCharacterSize(14);            // Font size
-		text->setFillColor(i >= 2 ? sf::Color::White : sf::Color::Yellow); // Text color
+        text->setFont(font);
+        text->setCharacterSize(14);            // Font size
+        text->setFillColor(i >= 2 ? sf::Color::White : sf::Color::Yellow); // Text color
         sf::FloatRect bounds = text->getLocalBounds();
         text->setOrigin(bounds.width / 2, bounds.height / 2);
     }
@@ -87,13 +87,13 @@ void Game::Menu()
     AidenTexTV2.setPosition(center, 200);
     AidenTexTV3.setPosition(center + 50, 200);
     sf::FloatRect bounds = AidenPointerV1.getLocalBounds();
-	AidenPointerV1.setOrigin(bounds.width / 2, bounds.height / 2);
+    AidenPointerV1.setOrigin(bounds.width / 2, bounds.height / 2);
     AidenPointerV1.setPosition(center - 50, 180);
     AidenPointerV1.setRotation(180);
 
     Time* time = Time::GetInstance();
     time->deltaTime = 0;
-    while (window.isOpen()){
+    while (window.isOpen()) {
         sf::Event event;
         while (window.pollEvent(event))
         {
@@ -106,7 +106,7 @@ void Game::Menu()
                 window.setView(sf::View(sf::FloatRect(0, 0, event.size.width, event.size.height)));
             if (event.type == sf::Event::KeyReleased)
             {
-				if (event.key.code == sf::Keyboard::Left || event.key.code == sf::Keyboard::Right || event.key.code == sf::Keyboard::Enter)
+                if (event.key.code == sf::Keyboard::Left || event.key.code == sf::Keyboard::Right || event.key.code == sf::Keyboard::Enter)
                     pressed = false;
             }
         }
@@ -114,7 +114,7 @@ void Game::Menu()
         window.clear();
 
         for (sf::Text* text : texts)
-			window.draw(*text);
+            window.draw(*text);
         window.draw(AidenPointerV1);
 
         if (starting)
@@ -123,7 +123,7 @@ void Game::Menu()
             if (startTimer % 20 < 10)
                 TygoTexTV2.setFillColor(sf::Color::Yellow);
             else
-				TygoTexTV2.setFillColor(sf::Color::White);
+                TygoTexTV2.setFillColor(sf::Color::White);
 
             if (startTimer <= 0)
             {
@@ -135,15 +135,15 @@ void Game::Menu()
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter) && !starting && !pressed)
         {
             starting = true;
-			startTimer = 60;
+            startTimer = 60;
         }
 
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && !pressed && !starting)
         {
-			if (index > 0)
-			    index--;
+            if (index > 0)
+                index--;
             pressed = true;
-			Maze::GetInstance()->SetResolution(scales[index]);
+            Maze::GetInstance()->SetResolution(scales[index]);
             index++;
             window.setSize(sf::Vector2u(224 * index, 288 * index));
             int center = window.getSize().x / 2;
@@ -161,10 +161,10 @@ void Game::Menu()
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && !pressed && !starting)
         {
             if (index < 2)
-				index++;
+                index++;
             pressed = true;
             Maze::GetInstance()->SetResolution(scales[index]);
-			index++;
+            index++;
             window.setSize(sf::Vector2u(224 * index, 288 * index));
             int center = window.getSize().x / 2;
             TygoTexTV1.setPosition(center, 20 * index);
@@ -191,6 +191,11 @@ void Game::Menu()
         window.display();
         time->frameCount++;
     }
+    for (sf::Text* text : texts) {
+        text = nullptr;
+        delete text;
+    }
+    texts.clear();
     time = nullptr;
     delete time;
 }
@@ -311,6 +316,8 @@ void Game::Run()
     ghosts.clear();
     time = nullptr;
 	delete time;
+    pacman = nullptr;
+	delete pacman;
 }
 
 void Game::GameOver()
@@ -359,6 +366,8 @@ void Game::GameOver()
 
         window.display();
     }
+    time = nullptr;
+	delete time;
 }
 
 void Game::End()
@@ -509,6 +518,16 @@ void Game::End()
         window.display();
         time->frameCount++;
     }
+    for (sf::Text* text : texts) {
+		text = nullptr;
+		delete text;
+	}
+    for (sf::Text* text : scoreboard) {
+		text = nullptr;
+		delete text;
+	}
+    texts.clear();
+	scoreboard.clear();
     time = nullptr;
     delete time;
 }
