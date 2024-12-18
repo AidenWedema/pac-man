@@ -1,3 +1,4 @@
+
 #include "Maze.h"
 
 Maze::Maze()
@@ -30,6 +31,10 @@ void Maze::LoadMaze(int level)
 		case 1:
 			LoadMaze1();
 			break;
+
+        case 2:
+            LoadMaze2();
+            break;
 
 		default:
 			LoadMaze1();
@@ -298,4 +303,56 @@ void Maze::LoadMaze1()
         std::cout << e.what() << std::endl;
         return;
     }
+}
+
+void Maze::LoadMaze2()
+{
+    std::string level =
+        "                            "
+        "                            "
+        "                            "
+        "=======qp==========qp======="
+        "       i!..........i!       " 
+        "_____z i!.f______z.i! f_____"
+        "x----) ().(--zf--).() (----k"
+        "Io...........i!...........oH"
+        "I.f_____z.fz.i!.fz.f_____z.H"
+        "I.if----).i!.i!.i!.(----z!.H"
+        "I.i!......i!.().i!......i!.H"
+        "I.i!.f__z.i!....i!.f__z.i!.H"
+        "I.().(-z!.i(____)!.if-).().H"
+        "I......i!.(------).i!......H"
+        "t____z.i!....G.....i!.f____y"
+        "x----).i!.$#]@@[#€.i!.(----k"
+        "I......i!.H      I.i!......H"
+        "I.f__z.().H      I.().f__z.H"
+        "I.(-z!....H      I....if-).H"
+        "I...i!.fz.%======^.fz.i!...H"
+        "{#€.i!.i!..........i!.i!.$#}"
+        "  I.i!.i(_z.f__z.f_)!.i!.H  "
+        "  I.().(--).i  !.(--).().H  "
+        "  I.........i  !.........H  "
+        "  I.f_____z.i  !.f_____z.H  "
+        "==^.(--zf-).(--).(-zf--).%=="
+        "   ....i!....S.....i!....   "
+        "__z.fz.i!.f______z.i!.fz.f__"
+        "x-).i!.().(__zf__).().i!.(-k"
+        "Io..i!.......i!.......i!..oH"
+        "I.f_)!.f___z.i!.f___z.i(_z.H"
+        "I.(--).(---).().(---).(--).H"
+        "I..........................H"
+        "{##########################}"
+        "                            "
+        "                            ";
+
+    try
+    {
+        MazeFromString(level);
+    }
+    catch (const std::exception& e)
+    {
+        std::cout << e.what() << std::endl;
+        return;
+    }
+
 }
