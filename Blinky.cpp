@@ -3,6 +3,7 @@
 
 Blinky::Blinky(Vector2 pos) : Ghost(pos)
 {
+	name = "Blinky";
 	color = sf::Color::Color(255, 0, 0, 255);
 
 	scatterTarget = Vector2(27, 3); // placeholder

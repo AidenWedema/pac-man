@@ -23,6 +23,8 @@ public:
 	void Update() override;
 	void Draw(sf::RenderTarget& target) override;
 
+	void BOO();
+
 	void SetState(States state);
 	States GetState() { return state; }
 
@@ -40,6 +42,7 @@ protected:
 	std::string name;
 	AnimationController animationController;
 	int homeTimer;
+	int scaredTimer;
 
 	virtual void CalculateTarget() {};
 

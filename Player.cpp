@@ -1,4 +1,5 @@
 #include "Player.h"
+#include "Game.h"
 
 Player::Player() 
 {
@@ -94,6 +95,9 @@ void Player::Eat(Maze::Node* node)
 	if (node->super) 
 	{
 		Scoreboard::GetInstance()->AddScore(40);
+		// Set all ghosts to frightened
+		for (Ghost* ghost : Game::GetInstance()->GetGhosts())
+			ghost->BOO();
 	}
 
 	// Update the tile to a blank tile

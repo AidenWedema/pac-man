@@ -3,6 +3,7 @@
 
 Inky::Inky(Vector2 pos, Blinky* blinky) : Ghost(pos)
 {
+	name = "Inky";
 	this->blinky = blinky;
 	
 	color = sf::Color::Color(0, 255, 255, 255);

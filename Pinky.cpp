@@ -3,6 +3,7 @@
 
 Pinky::Pinky(Vector2 pos) : Ghost(pos)
 {
+	name = "Pinky";
 	color = sf::Color::Color(255, 183, 255, 255);
 
 	scatterTarget = Vector2(0, 3); // placeholder

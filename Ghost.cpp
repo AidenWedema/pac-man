@@ -1,5 +1,7 @@
 #include "Ghost.h"
 #include "Game.h"
+#include <thread>
+#include <chrono>
 
 Ghost::Ghost(Vector2 pos)
 {
@@ -26,6 +28,15 @@ void Ghost::Update()
 #endif // _DEBUG
 
 	SetAnimation();
+
+	// Check if the ghost's screen position is too far from its maze position and moveTarget
+	int res = Maze::GetInstance()->GetResolution();
+	if (((abs(x - position.x * res) > res / 2 || abs(y - position.y * res) > res / 2) && (abs(x - moveTarget.x * res) > res / 2 || abs(y - moveTarget.y * res) > res / 2)) && state != HOME)
+	{
+		x = position.x * res;
+		y = position.y * res;
+		//std::cout << name << "'s position desync fixed." << std::endl;
+	}
 
 	switch (state)
 	{
@@ -78,12 +89,28 @@ void Ghost::Draw(sf::RenderTarget& target)
 	rect.setPosition(position.x * Maze::GetInstance()->GetResolution(), position.y * Maze::GetInstance()->GetResolution());
 	rect.setSize(sf::Vector2f(Maze::GetInstance()->GetResolution() * 0.8f, Maze::GetInstance()->GetResolution() * 0.8f));
 	rect.setFillColor(color);
+	sf::CircleShape circle;
+	circle.setRadius(Maze::GetInstance()->GetResolution() * 0.5f);
+	circle.setPosition(Maze::GetInstance()->GetResolution() * moveTarget.x, Maze::GetInstance()->GetResolution() * moveTarget.y);
+	circle.setFillColor(color);
+
 	target.draw(rect);
+	target.draw(circle);
 #endif // _DEBUG
+}
+
+void Ghost::BOO()
+{
+	scaredTimer = 380;
+	if (state == EATEN || state == FRIGHTEND || state == HOME)
+		return;
+	SetState(FRIGHTEND);
 }
 
 void Ghost::SetState(States s)
 {
+	state = s;
+	speed = 1.0f;
 	switch (s)
 	{
 	case CHASE:
@@ -93,16 +120,29 @@ void Ghost::SetState(States s)
 		direction = (Directions)((direction + 2) % 4);
 		break;
 	case FRIGHTEND:
+		speed = 0.5f;
 		direction = (Directions)((direction + 2) % 4);
 		break;
 	case EATEN:
-		break;
+		//speed = 1.5f;
+		return;
 	default:
 		break;
 	}
-
-	moveTarget = position;
-	state = s;
+	Maze::Node* node = Maze::GetInstance()->GetNode(position);
+	if (node->connections.find(direction) != node->connections.end())
+		moveTarget = node->connections[direction]->position;
+	else
+	{
+		x = position.x * Maze::GetInstance()->GetResolution();
+		y = position.y * Maze::GetInstance()->GetResolution();
+		do
+		{
+			direction = (Directions)((direction + 1) % 4);
+			node = Maze::GetInstance()->GetNode(position);
+		} while (node->connections.find(direction) == node->connections.end());
+		moveTarget = node->connections[direction]->position;
+	}
 }
 
 void Ghost::Chase()
@@ -123,14 +163,22 @@ void Ghost::Frightend()
 {
 	RandomMove();
 	CheckPacmanDistance();
+	scaredTimer--;
+	if (scaredTimer <= 0)
+	{
+		if (Time::GetInstance()->frameCount % 1200 > 420)
+			SetState(CHASE);
+		else if (Time::GetInstance()->frameCount % 1200 < 420)
+			SetState(SCATTER);
+	}
 }
 
 void Ghost::Eaten()
 {
-	target = Vector2(14, 14); // placeholder
-	Move();/*
+	target = Maze::GetInstance()->GetHouse()->position;
+	Move();
 	if (position == target)
-		SetState(CHASE);*/
+		SetState(CHASE);
 }
 
 void Ghost::Move()
@@ -254,7 +302,12 @@ void Ghost::CheckPacmanDistance()
 		return;
 	// If the ghost is frightened, pacman eats the ghost. Otherwise, pacman dies
 	if (state == FRIGHTEND)
+	{
 		SetState(EATEN);
+		Scoreboard::GetInstance()->AddScore(200);
+		Music::GetInstance()->PlaySound("assets/audio/scream.ogg");
+        std::this_thread::sleep_for(std::chrono::milliseconds(750)); // EWW
+	}
 	else
 		Game::GetInstance()->GameOver();
 }

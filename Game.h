@@ -41,11 +41,13 @@ public:
 	GameState GetGameState() const { return gameState; }
 
 	Player* GetPacman() { return pacman; }
+	std::vector<Ghost*> GetGhosts() { return ghosts; }
 
 private:
 	Game() {};
 
 	GameState gameState = MENU;
 	Player* pacman;
+	std::vector<Ghost*> ghosts;
 	bool running;
 };

@@ -9,7 +9,17 @@ class AnimationController
 {
 public:
 	AnimationController() { index = 0; timer = 0; sprite = new sf::Sprite(); reverse = false; currentAnimation = nullptr; };
-	~AnimationController() { delete sprite; delete currentAnimation;  for (auto animation : animations) delete animation.second; };
+	~AnimationController() { 
+		sprite = nullptr; delete sprite; 
+		delete currentAnimation;  
+		for (auto animation : animations) {
+			for (auto frame : *animation.second->frames)
+				delete frame;
+			delete animation.second->frames;
+			animation.second = nullptr;
+			delete animation.second;
+		}
+	};
 
 	struct Animation
 	{

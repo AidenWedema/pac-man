@@ -198,17 +198,17 @@ void Game::Menu()
 void Game::Run()
 {
 #ifdef _DEBUG
-    sf::Font font;
+    sf::Font dfont;
     sf::Text fpsText;
     // Load the Arial font from the assets folder
-    if (!font.loadFromFile("assets/fonts/Arial.ttf")) {
+    if (!dfont.loadFromFile("assets/fonts/Arial.ttf")) {
         // Handle error if the font fails to load
         std::cerr << "Error loading Arial font from assets/fonts/Arial.ttf" << std::endl;
         return;
     }
 
     // Initialize the text object for displaying FPS
-    fpsText.setFont(font);
+    fpsText.setFont(dfont);
     fpsText.setCharacterSize(14);           // Font size
     fpsText.setFillColor(sf::Color::White); // Text color
     fpsText.setPosition(10, 10);            // Position on screen (top-left corner)
@@ -226,6 +226,7 @@ void Game::Run()
     Pinky* pinky = new Pinky(ghostHouse + Vector2(0, 3));
 	Inky* inky = new Inky(ghostHouse + Vector2(-2, 3), blinky);
     Clyde* clyde = new Clyde(ghostHouse + Vector2(2, 3));
+    ghosts = {blinky, pinky, inky, clyde};
 
     sf::Text scoreText;
 	sf::Font font;
@@ -305,15 +306,10 @@ void Game::Run()
         time->frameCount++;
     }
     // delete all pointers
-	blinky = nullptr;
-	pinky = nullptr;
-	inky = nullptr;
-	clyde = nullptr;
+    for (Ghost* ghost : ghosts)
+        delete ghost;
+    ghosts.clear();
     time = nullptr;
-	delete blinky;
-	delete pinky;
-	delete inky;
-	delete clyde;
 	delete time;
 }
 

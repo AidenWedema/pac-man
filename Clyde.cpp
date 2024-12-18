@@ -3,6 +3,7 @@
 
 Clyde::Clyde(Vector2 pos) : Ghost(pos)
 {
+	name = "Clyde";
 	color = sf::Color::Color(255, 183, 81, 255);
 
 	scatterTarget = Vector2(0, 33); // placeholder
