@@ -23,10 +23,9 @@ public:
 	static Game* instance;
 	static Game* GetInstance();
 
-	enum GameState { CLOSE, MENU, GAME, END };
+	enum GameState { CLOSE, MENU, GAME, END, WIN };
 
 	sf::RenderWindow window;
-
 
 	Vector2 debugGhostTarget = Vector2(8, 20);
 	Directions debugGhostDirection = Directions::RIGHT;
@@ -36,6 +35,8 @@ public:
 	void Run();
 	void GameOver();
 	void End();
+	void WinLevel();
+	void Win();
 
 	void SetGameState(GameState state) { gameState = state; }
 	GameState GetGameState() const { return gameState; }
@@ -44,10 +45,11 @@ public:
 	std::vector<Ghost*> GetGhosts() { return ghosts; }
 
 private:
-	Game() {};
+	Game() { levelnum = 1; };
 
 	GameState gameState = MENU;
 	Player* pacman;
 	std::vector<Ghost*> ghosts;
 	bool running;
+	int levelnum;
 };

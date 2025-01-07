@@ -32,6 +32,9 @@ void Game::Start()
         case Game::END:
 			End();
 			break;
+        case Game::WIN:
+			Win();
+            break;
         default:
             gameState = Game::MENU;
 			break;
@@ -220,7 +223,7 @@ void Game::Run()
 #endif
     running = true;
     Music::GetInstance()->PlayMusic("assets/audio/main-theme-game.ogg");
-    Maze::GetInstance()->LoadMaze(0);
+    Maze::GetInstance()->LoadMaze(levelnum);
     // TEST
     debugGhostTarget = Vector2(17, 20);
     debugGhostDirection = Directions::RIGHT;
@@ -247,7 +250,6 @@ void Game::Run()
 	pacman->SetPosition(pacSpawn.x * resolution, pacSpawn.y * resolution);
     
     Scoreboard* scoreboard = Scoreboard::GetInstance();
-    scoreboard->ResetScore();
     Time* time = Time::GetInstance();
     time->frameCount = 0;
     while (window.isOpen() && running)
@@ -526,8 +528,25 @@ void Game::End()
 		text = nullptr;
 		delete text;
 	}
+    Scoreboard::GetInstance()->ResetScore();
     texts.clear();
 	scoreboard.clear();
     time = nullptr;
     delete time;
+}
+
+void Game::WinLevel()
+{
+    running = false;
+	gameState = WIN;
+}
+
+void Game::Win()
+{
+    // Update the level number
+	levelnum = (levelnum + 1) % 3;
+    if (levelnum == 0)
+        levelnum++;
+
+	gameState = GAME;
 }

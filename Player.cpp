@@ -105,7 +105,7 @@ void Player::Eat(Maze::Node* node)
 
 	if (palletCount == Maze::GetInstance()->GetPelletCounter())
 	{
-		std::cout << "YOU WIN" << std::endl; // placeholder
+		Game::GetInstance()->WinLevel();
 	}
 }
 
