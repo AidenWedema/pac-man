@@ -96,5 +96,6 @@ private:
 	void CreateWarp(Node*, Node*, Directions);
 	void MazeFromString(std::string);
 	void LoadMaze1();
+	void LoadMaze2();
 };
 
