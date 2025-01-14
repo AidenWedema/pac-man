@@ -245,6 +245,13 @@ void Game::Run()
 	scoreText.setFillColor(sf::Color::White);
 	scoreText.setPosition(sf::Vector2f(Maze::GetInstance()->GetResolution(), Maze::GetInstance()->GetResolution()));
 
+    sf::Text livesText;
+    livesText.setFont(font);
+    livesText.setCharacterSize(Maze::GetInstance()->GetResolution());
+    livesText.setFillColor(sf::Color::White);
+    livesText.setPosition(sf::Vector2f(Maze::GetInstance()->GetResolution() * 18, Maze::GetInstance()->GetResolution()));
+
+
     int resolution = Maze::GetInstance()->GetResolution();
     pacman->SetPosition(pacSpawn);
 	pacman->SetPosition(pacSpawn.x * resolution, pacSpawn.y * resolution);
@@ -279,10 +286,13 @@ void Game::Run()
 		clyde->Update();
 
 		scoreText.setString("SCORE " + std::to_string(scoreboard->GetScore()));
+        livesText.setString("LIVES: " + std::to_string(pacman->lives));
+
 
         Maze::GetInstance()->Draw(&window);
 
         window.draw(scoreText);
+        window.draw(livesText);
 		blinky->Draw(window);
 		pinky->Draw(window);
 		inky->Draw(window);
@@ -345,11 +355,29 @@ void Game::GameOver()
 
         pacman->animations.Update();
 
-        if (pacman->animations.getIndex() == frameCount - 1)
-			gameState = Game::END;
+        if (pacman->animations.getIndex() == frameCount - 1) 
+            gameState = Game::END;
 		if (pacman->animations.getIndex() == 0 && gameState == Game::END)
 		{
-			running = false;
+            if (pacman->lives > 0) {
+                pacman->lives -= 1;
+                int res = Maze::GetInstance()->GetResolution();
+                Vector2 zpawn = Maze::GetInstance()->GetSpawn()->position;
+                Vector2 houze = Maze::GetInstance()->GetHouse()->position;
+                pacman->SetPosition(zpawn);
+                pacman->SetPosition(zpawn.x * res, zpawn.y * res);
+                pacman->SetDirection(RIGHT);
+                pacman->moveTarget = zpawn + pacman->GetDirection();
+                for (Ghost* ghast : ghosts) {
+                    ghast->SetPosition(houze);
+                    ghast->SetPosition(houze.x * res, houze.y * res);
+                    ghast->SetDirection(RIGHT);
+                    ghast->SetMoveTarget(houze+ghast->GetDirection());
+                }
+                gameState = Game::GAME;
+                break;
+            }
+            running = false;
 			break;
 		}
 
@@ -528,7 +556,9 @@ void Game::End()
 		text = nullptr;
 		delete text;
 	}
-    Scoreboard::GetInstance()->ResetScore();
+    if (pacman->lives <= 0) {
+        Scoreboard::GetInstance()->ResetScore();
+    }
     texts.clear();
 	scoreboard.clear();
     time = nullptr;

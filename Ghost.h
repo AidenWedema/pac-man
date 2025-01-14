@@ -31,6 +31,9 @@ public:
 	void SetTarget(Vector2 target) { this->target = target; }
 	Vector2 GetTarget() { return target; }
 
+	void SetMoveTarget(Vector2 target) { this->moveTarget = target; }
+	Vector2 GetMoveTarget() { return moveTarget; }
+
 protected:
 	States state;
 	Vector2 moveTarget;		// position to move towards

@@ -6,6 +6,7 @@ Player::Player()
 	speed = 1.0f;
 	direction = RIGHT;
 	bufferDirection = RIGHT;
+	lives = 3;
 	
 	position = Maze::GetInstance()->GetSpawn()->position;
 	moveTarget = position + direction;

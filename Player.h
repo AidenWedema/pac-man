@@ -8,7 +8,7 @@ class Player : public Object
 {
 public:
 	Player();
-	~Player() {};
+	~Player() {};	
 	
 	void Update() override;
 	void Draw(sf::RenderTarget& target) override;
@@ -17,6 +17,7 @@ public:
 	Vector2 moveTarget;
 	Directions bufferDirection;
 	int palletCount;
+	int lives;
 
 	void Move();
 	void Eat(Maze::Node* node);
