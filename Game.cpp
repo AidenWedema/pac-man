@@ -556,9 +556,7 @@ void Game::End()
 		text = nullptr;
 		delete text;
 	}
-    if (pacman->lives <= 0) {
-        Scoreboard::GetInstance()->ResetScore();
-    }
+    Scoreboard::GetInstance()->ResetScore();
     texts.clear();
 	scoreboard.clear();
     time = nullptr;
